@@ -1,0 +1,29 @@
+# === PlatformIO build + deps caches ===
+.pio/
+.pioenvs/
+.piolibdeps/
+.libdeps/           # (nouveaux emplacements possibles)
+
+# === VS Code: garder seulement extensions.json si tu l'utilises ===
+.vscode/
+!.vscode/extensions.json
+
+# === Fichiers de compilation génériques (cross-plateformes) ===
+*.d
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+*.exe
+*.out
+*.app
+
+# === Caches et index ===
+.cache/
+.pytest_cache/
+__pycache__/
+*.pyc
+compile_commands.json
