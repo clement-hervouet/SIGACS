@@ -20,7 +20,7 @@ def connect_db():
         database=DB_NAME
     )
 
-def create_table():
+def create_table():             #desactiver le call si table créer à la main
     conn = connect_db()
     cursor = conn.cursor()
     cursor.execute("""
