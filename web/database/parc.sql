@@ -50,8 +50,8 @@ CREATE TABLE culture (
 CREATE TABLE capteur (
     id INTEGER PRIMARY KEY,
     type TEXT,
-    maxValue FLOAT,
-    minValue FLOAT,
+    maxSensorValue FLOAT,
+    minSensorValue FLOAT,
     unite TEXT
 );
 
