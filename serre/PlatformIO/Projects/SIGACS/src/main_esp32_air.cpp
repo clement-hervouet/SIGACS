@@ -3,16 +3,20 @@
 #include <PubSubClient.h>
 #include "DHT.h"
 
-#define DHTPIN   32
+#define DHTPIN   33
 #define DHTTYPE  DHT22
 
 // ---- WiFi ----
-const char* WIFI_SSID     = "TON_SSID";
-const char* WIFI_PASSWORD = "TON_MDP";
+const char* WIFI_SSID     = "iPhone";
+const char* WIFI_PASSWORD = "alan2006";
 
 // ---- MQTT ----
 <<<<<<< HEAD
+<<<<<<< HEAD
 const char* MQTT_SERVER   = "192.168.1.100";   // IP du broker
+=======
+const char* MQTT_SERVER   = "broker.hivemq.com";   // IP du broker en ligne
+>>>>>>> a6ff9c9 (REFACTOR changement de capteur de temperature v1.2)
 const int   MQTT_PORT     = 1883;    // Port du broker
 =======
 const char* MQTT_SERVER   = "";   // IP du broker
@@ -73,12 +77,6 @@ void loop() {
   float humAir  = dht.readHumidity();
   float tempAir = dht.readTemperature();
 
-  if (isnan(humAir) || isnan(tempAir)) {
-    Serial.println("Erreur DHT22");
-    delay(2000);
-    return;
-  }
-
   Serial.print("Température Air : ");
   Serial.print(tempAir);
   Serial.println(" °C");
@@ -97,6 +95,5 @@ void loop() {
 
   mqttClient.publish(MQTT_TOPIC, payload.c_str());
 
-  delay(2000);
+  delay(900000);  // 15 minutes
 }
-
