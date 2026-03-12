@@ -74,3 +74,13 @@ CREATE TABLE mesure (
     measured_at DATETIME,                    -- merged date + time
     capteur INTEGER REFERENCES capteur(id)   -- proper FK
 );
+
+-- Table: error
+-- Log des erreurs runtime du programme MQTT bridge
+CREATE TABLE error (
+    id          INTEGER PRIMARY KEY AUTO_INCREMENT,
+    error_type  VARCHAR(64)  NOT NULL,   -- ex: UNKNOWN_SENSOR, BAC_NOT_FOUND, INVALID_PAYLOAD
+    message     TEXT         NOT NULL,   -- description lisible de l'erreur
+    value       TEXT,                    -- valeur brute reçue au moment de l'erreur
+    occurred_at DATETIME     NOT NULL
+);
