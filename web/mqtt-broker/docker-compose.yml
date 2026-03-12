@@ -12,10 +12,10 @@ services:
 
   db:
     image: mariadb:11
-    container_name: mariadb
+    container_name: mosquitto_db
     environment:
       MYSQL_ROOT_PASSWORD: rootpass
-      MYSQL_DATABASE: mqtt_data
+      MYSQL_DATABASE: parc
       MYSQL_USER: mqttuser
       MYSQL_PASSWORD: mqttpass
     ports:
@@ -33,7 +33,7 @@ services:
       DB_HOST: db
       DB_USER: mqttuser
       DB_PASSWORD: mqttpass
-      DB_NAME: mqtt_data
+      DB_NAME: parc
       MQTT_HOST: mqtt
       MQTT_PORT: 1883
 
