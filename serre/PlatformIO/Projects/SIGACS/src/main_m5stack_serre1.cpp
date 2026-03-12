@@ -9,8 +9,13 @@ const char* WIFI_SSID     = "TON_SSID";
 const char* WIFI_PASSWORD = "TON_MDP";
 
 // ---- MQTT ----
+<<<<<<< HEAD
 const char* MQTT_SERVER   = "192.168.1.100";   // même IP que sur les ESP32
 const int   MQTT_PORT     = 1883;    // Port du broker
+=======
+const char* MQTT_SERVER   = "";   // même IP que sur les ESP32
+const int   MQTT_PORT     = 0000;    // Port du broker
+>>>>>>> f64b0601e3aad993bd5df3c32b2edf43cbb8bb8a
 
 // Topics utilisés par les 3 ESP32
 const char* TOPIC_AIR  = "/serre/1/bac/1/air";

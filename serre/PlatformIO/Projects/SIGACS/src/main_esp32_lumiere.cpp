@@ -9,8 +9,13 @@ const char* WIFI_SSID     = "TON_SSID";
 const char* WIFI_PASSWORD = "TON_MDP";
 
 // ---- MQTT ----
+<<<<<<< HEAD
 const char* MQTT_SERVER   = "192.168.1.100";   // IP du broker
 const int   MQTT_PORT     = 1883;    // Port du broker
+=======
+const char* MQTT_SERVER   = "";   // IP du broker
+const int   MQTT_PORT     = 0000;    // Port du broker
+>>>>>>> f64b0601e3aad993bd5df3c32b2edf43cbb8bb8a
 // Topic pour ce bac : serre 1, bac 1, lumière
 const char* MQTT_TOPIC    = "/serre/1/bac/1/lum";
 
