@@ -1,0 +1,53 @@
+services:
+  caddy:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - /etc/docker/volumes/caddy/conf:/etc/caddy
+      - /etc/docker/volumes/caddy/site:/srv
+      - caddy_data:/data
+      - caddy_config:/config
+
+    depends_on:
+      - php
+      - db
+
+  db:
+    image: mysql:latest
+    container_name: caddy-db
+    ports:
+     - "3306:3306"
+    environment:
+     - MYSQL_ROOT_PASSWORD=stjolorient
+     - MYSQL_DATABASE=user_base
+     - MYSQL_USER=caddy
+     - MYSQL_PASSWORD=caddy
+    volumes:
+     - /etc/docker/volumes/caddy/caddy-db:/var/lib/mysql
+
+  php:
+    build: ./php
+    volumes:
+      - /etc/docker/volumes/caddy/site:/srv
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=caddy-db
+      - PMA_PORT=3306
+      - APACHE_PORT=33060
+    depends_on:
+      - db
+      - caddy
+
+volumes:
+  caddy_data:
+  caddy_config:
