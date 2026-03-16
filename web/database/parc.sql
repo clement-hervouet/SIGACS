@@ -27,9 +27,10 @@ CREATE TABLE serre (
 CREATE TABLE bac (
     id INTEGER PRIMARY KEY,
     serre INTEGER REFERENCES serre(id),
-    x_size INTEGER,
-    y_size INTEGER,
-    numero INTEGER
+    x_taille INTEGER,
+    y_taille INTEGER,
+    numero INTEGER,
+    arrose BOOLEAN
 );
 
 -- Table: culture
@@ -39,10 +40,13 @@ CREATE TABLE culture (
     plante_latin TEXT,
     humMinAmb FLOAT,
     humMaxAmb FLOAT,
+    humOptAmb FLOAT,
     humMinSol FLOAT,
     humMaxSol FLOAT,
+    humOptSol FLOAT,
     tempMin FLOAT,
     tempMax FLOAT,
+    tempOpt FLOAT,
     tempsPousse INTEGER
 );
 
@@ -50,8 +54,8 @@ CREATE TABLE culture (
 CREATE TABLE capteur (
     id INTEGER PRIMARY KEY,
     type TEXT,
-    maxSensorValue FLOAT,
-    minSensorValue FLOAT,
+    valeurMaxCapteur FLOAT,
+    valeurMinCapteur FLOAT,
     unite TEXT
 );
 
@@ -63,7 +67,7 @@ CREATE TABLE bloc (
     y INTEGER,
     empty BOOLEAN,
     culture INTEGER REFERENCES culture(id),  -- FK instead of TEXT
-    planted_at DATETIME
+    plante_a DATETIME
 );
 
 -- Table: mesure
@@ -71,7 +75,7 @@ CREATE TABLE mesure (
     id INTEGER PRIMARY KEY,
     bac INTEGER REFERENCES bac(id),
     value FLOAT,
-    measured_at DATETIME,                    -- merged date + time
+    mesure_a DATETIME,                    -- merged date + time
     capteur INTEGER REFERENCES capteur(id)   -- proper FK
 );
 
@@ -79,8 +83,8 @@ CREATE TABLE mesure (
 -- Log des erreurs runtime du programme MQTT bridge
 CREATE TABLE error (
     id          INTEGER PRIMARY KEY AUTO_INCREMENT,
-    error_type  VARCHAR(64)  NOT NULL,   -- ex: UNKNOWN_SENSOR, BAC_NOT_FOUND, INVALID_PAYLOAD
+    type_erreur  VARCHAR(64)  NOT NULL,   -- ex: UNKNOWN_SENSOR, BAC_NOT_FOUND, INVALID_PAYLOAD
     message     TEXT         NOT NULL,   -- description lisible de l'erreur
-    value       TEXT,                    -- valeur brute reçue au moment de l'erreur
-    occurred_at DATETIME     NOT NULL
+    valeur       TEXT,                    -- valeur brute reçue au moment de l'erreur
+    erreur_a     DATETIME     NOT NULL
 );
