@@ -1,16 +1,19 @@
-main_m5stack_serre1.cpp
 #include <Arduino.h>
-#include <M5Unified.h>
 #include <WiFi.h>
 #include <PubSubClient.h>
+#include <M5Unified.h>      
 
 // ---- WiFi ----
-const char* WIFI_SSID     = "TON_SSID";
-const char* WIFI_PASSWORD = "TON_MDP";
+const char* WIFI_SSID     = "iPhone";
+const char* WIFI_PASSWORD = "alan2006";
 
 // ---- MQTT ----
 <<<<<<< HEAD
+<<<<<<< HEAD
 const char* MQTT_SERVER   = "192.168.1.100";   // même IP que sur les ESP32
+=======
+const char* MQTT_SERVER   = "broker.hivemq.com";   // IP du broker en ligne
+>>>>>>> a6ff9c9 (REFACTOR changement de capteur de temperature v1.2)
 const int   MQTT_PORT     = 1883;    // Port du broker
 =======
 const char* MQTT_SERVER   = "";   // même IP que sur les ESP32
@@ -139,6 +142,6 @@ void loop() {
     M5.Lcd.printf("Lum: %.1f %%\n", lightV);
   }
 
-  delay(300);
+  delay(900000);  // 15 minutes
 }
 

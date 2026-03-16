@@ -5,10 +5,11 @@
 #define SOIL_PIN   36   // entrée analogique capteur sol
 
 // ---- WiFi ----
-const char* WIFI_SSID     = "TON_SSID";
-const char* WIFI_PASSWORD = "TON_MDP";
+const char* WIFI_SSID     = "iPhone";
+const char* WIFI_PASSWORD = "alan2006";
 
 // ---- MQTT ----
+<<<<<<< HEAD
 <<<<<<< HEAD
 const char* MQTT_SERVER   = "192.168.1.100";   // IP du broker 
 const int   MQTT_PORT     = 1883;             // Port du broker
@@ -16,6 +17,10 @@ const int   MQTT_PORT     = 1883;             // Port du broker
 const char* MQTT_SERVER   = "";   // IP du broker 
 const int   MQTT_PORT     = 0000;             // Port du broker
 >>>>>>> f64b0601e3aad993bd5df3c32b2edf43cbb8bb8a
+=======
+const char* MQTT_SERVER   = "broker.hivemq.com";   // IP du broker en ligne
+const int   MQTT_PORT     = 1883;    // Port du broker
+>>>>>>> a6ff9c9 (REFACTOR changement de capteur de temperature v1.2)
 // Topic pour ce bac : serre 1, bac 1
 const char* MQTT_TOPIC    = "/serre/1/bac/1/sol";
 
@@ -83,6 +88,6 @@ void loop() {
 
   mqttClient.publish(MQTT_TOPIC, payload.c_str());
 
-  delay(1000);
+  delay(900000);  // 15 minutes
 }
 
