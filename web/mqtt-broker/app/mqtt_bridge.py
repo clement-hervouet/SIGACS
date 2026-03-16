@@ -56,7 +56,7 @@ def get_bac_id(cursor, serre_numero: int, bac_numero: int):
 def insert_mesure(cursor, bac_id: int, capteur_id: int, value: float):
     cursor.execute(
         """
-        INSERT INTO mesure (bac, value, measured_at, capteur)
+        INSERT INTO mesure (bac, value, mesure_a, capteur)
         VALUES (%s, %s, %s, %s)
         """,
         (bac_id, value, datetime.now(), capteur_id),
@@ -66,7 +66,7 @@ def insert_mesure(cursor, bac_id: int, capteur_id: int, value: float):
 def insert_error(cursor, error_type: str, message: str, value: str):
     cursor.execute(
         """
-        INSERT INTO error (error_type, message, value, occurred_at)
+        INSERT INTO error (type_erreur, message, valeur, erreur_a)
         VALUES (%s, %s, %s, %s)
         """,
         (error_type, message, value, datetime.now()),
