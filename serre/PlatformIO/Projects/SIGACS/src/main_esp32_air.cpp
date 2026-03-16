@@ -1,22 +1,26 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <PubSubClient.h>
-#include "DHT12.h"
+#include <M5StickC.h>
+#include <Adafruit_Sensor.h>
+#include <DHT.h>
+#include "time.h"  
 
-// ---- WiFi ----
-const char* WIFI_SSID     = "iPhone";
-const char* WIFI_PASSWORD = "alan2006";
+#define DHTPIN 33
+#define DHTTYPE DHT22
 
-// ---- MQTT ----
-const char* MQTT_SERVER   = "broker.hivemq.com";   // IP du broker en ligne
-const int   MQTT_PORT     = 1883;    // Port du broker
-
-// Topic pour ce bac : serre 1, bac 1, air
+const char* WIFI_SSID     = "Serre";
+const char* WIFI_PASSWORD = "stjolorient";
+const char* MQTT_SERVER   = "broker.hivemq.com";
+const int MQTT_PORT       = 1883;
 const char* MQTT_TOPIC    = "/serre/1/bac/1/air";
+
+// NTP E2
+const char* ntpServer = "0.pfsense.pool.ntp.org";
 
 WiFiClient espClient;
 PubSubClient mqttClient(espClient);
-DHT12 dht12;  // I2C DHT12 pour ENV HAT v1.2
+DHT dht(DHTPIN, DHTTYPE);
 
 void connectWiFi() {
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
@@ -30,68 +34,67 @@ void connectWiFi() {
   Serial.println(WiFi.localIP());
 }
 
-void connectMQTT() {
-  while (!mqttClient.connected()) {
-    Serial.print("Connexion MQTT...");
-    String clientId = "M5StickC-Air-";
-    clientId += String((uint32_t)ESP.getEfuseMac(), HEX);
-    if (mqttClient.connect(clientId.c_str())) {
-      Serial.println(" OK");
-    } else {
-      Serial.print(" échec, code=");
-      Serial.print(mqttClient.state());
-      Serial.println(" -> nouvel essai dans 2s");
-      delay(2000);
-    }
+void syncNTP() {
+  
+  // Config avec routeur
+  configTime(3600, 3600, "192.168.42.65");
+  
+  struct tm timeinfo;
+  int tentatives = 0;
+  
+  // BOUCLE ATTENTE 10s max [web:276]
+  while (!getLocalTime(&timeinfo) && tentatives < 20) {
+    delay(500);
+    Serial.print(".");
+    tentatives++;
+  }
+  
+  if (getLocalTime(&timeinfo)) {
+    Serial.printf("\n Heure: %02d:%02d %02d/%02d/%04d\n", 
+      timeinfo.tm_hour, timeinfo.tm_min, 
+      timeinfo.tm_mday, timeinfo.tm_mon+1, timeinfo.tm_year+1900);
+  } else {
+    Serial.println("\n Timeout NTP");
+    Serial.println("→ Vérif pfSense:");
+    Serial.println("  Services > NTP > Enable ON");
+    Serial.println("  Interfaces > LAN ON");
+    Serial.println("  Firewall > LAN > UDP/123 autorisé");
   }
 }
 
+
+
+void connectMQTT() {}
+
 void setup() {
-  M5.begin();      // init M5StickC + écran
+  M5.begin();
   Serial.begin(115200);
-  Wire.begin();    // I2C pour Grove/ENV HAT
   
-  dht12.begin(0x5C);  // adresse I2C DHT12
+  pinMode(DHTPIN, INPUT_PULLUP);
+  dht.begin();
   
   connectWiFi();
+  syncNTP();
+  
   mqttClient.setServer(MQTT_SERVER, MQTT_PORT);
   connectMQTT();
 }
 
 void loop() {
-  M5.update();  // bouton/écran M5
-  
-  if (!mqttClient.connected()) {
-    connectMQTT();
-  }
+  M5.update();
+  if (!mqttClient.connected()) connectMQTT();
   mqttClient.loop();
 
-  // Lecture DHT12
-  float humAir  = dht12.readHumidity();
-  float tempAir = dht12.readTemperature();
+  float humAir  = dht.readHumidity();
+  float tempAir = dht.readTemperature();
 
-  Serial.print("Température Air : ");
-  Serial.print(tempAir);
-  Serial.println(" °C");
-
-  Serial.print("Humidité Air : ");
-  Serial.print(humAir);
-  Serial.println(" %");
-
-  // Vérif valeurs valides
-  if (isnan(humAir) || isnan(tempAir)) {
-    Serial.println("Erreur DHT12 ! Skip MQTT");
-  } else {
-    // format "temp;hum" ex: "23.5;45.2"
+  if (!isnan(humAir) && !isnan(tempAir)) {
+    Serial.printf("T:%.1f°C H:%.1f%%\n", tempAir, humAir);
     String payload = String(tempAir, 1) + ";" + String(humAir, 1);
-
-    Serial.print("Publish MQTT: ");
-    Serial.print(MQTT_TOPIC);
-    Serial.print(" -> ");
-    Serial.println(payload);
-
     mqttClient.publish(MQTT_TOPIC, payload.c_str());
+  } else {
+    Serial.println("Erreur DHT22"); // Erreur de lecture du capteur
   }
 
-  delay(900000);  // 15 min
+  delay(5000);  // 5min ici mais 15min dans la version finale pour éviter de spammer le broker et économiser la batterie
 }
