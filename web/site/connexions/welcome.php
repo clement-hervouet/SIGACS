@@ -14,20 +14,8 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
 	<meta charset="UTF-8">
 	<title>Welcome</title>
 	<link href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/cosmo/bootstrap.min.css" rel="stylesheet" integrity="sha384-qdQEsAI45WFCO5QwXBelBe1rR9Nwiss4rGEqiszC+9olH1ScrLrMQr1KmDR964uZ" crossorigin="anonymous">
-	<style>
-		.wrapper {
-			width: 500px;
-			padding: 20px;
-		}
-
-		.wrapper h2 {
-			text-align: center
-		}
-
-		.wrapper form .form-group span {
-			color: red;
-		}
-	</style>
+	<link rel="stylesheet" href="static/css/style.css">
+	
 </head>
 
 <body>
