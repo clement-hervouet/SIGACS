@@ -46,6 +46,17 @@ body {
     background-color: var(--primary-color);
 }
 
+    .account-management {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+
+        gap: 10px;
+
+        position: absolute;
+        right: 20px;}
+
 .sidebar {
     grid-area: 2 / 1 / 4 / 2;
 
@@ -84,6 +95,24 @@ body {
     padding: 10px;
     
     background-color: var(--primary-color);
+}
+
+.btn {
+    display: inline-block;
+    padding: 5px;
+    background-color: white;
+}
+
+.btn-outline-valid {
+    border: 1px solid var(--success-color);
+}
+
+.btn-outline-warning {
+    border: 1px solid var(--warning-color);
+}
+
+.btn-outline-danger {
+    border: 1px solid var(--danger-color);
 }
 
 
