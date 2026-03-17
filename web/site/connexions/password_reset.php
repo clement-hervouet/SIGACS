@@ -4,12 +4,12 @@ session_start();
 
 // Check if the user is logged in, if not then redirect to login page
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
-    header('location: login.php');
+    header('location: ../login.php');
     exit;
 }
 
 // Include config file
-require_once 'config/config.php';
+require_once '../config/config.php';
 
 // Define variables and initialize with empty values
 $new_password = $confirm_password = '';
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $pdo->commit();
                 // Password updated successfully. Destroy the session, and redirect to login page
                 session_destroy();
-                header("location: login.php");
+                header("location: ../login.php");
                 exit();
             } else {
                 $pdo->rollBack();
@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <title>Reset Password</title>
     <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/cosmo/bootstrap.min.css" rel="stylesheet" integrity="sha384-qdQEsAI45WFCO5QwXBelBe1rR9Nwiss4rGEqiszC+9olH1ScrLrMQr1KmDR964uZ" crossorigin="anonymous">
-    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="../assets/static/css/style.css">
     
 </head>
 
@@ -106,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
                 <div class="form-group">
                     <input type="submit" class="btn btn-block btn-primary" value="Submit">
-                    <a class="btn btn-block btn-link bg-light" href="welcome.php">Cancel</a>
+                    <a class="btn btn-block btn-link bg-light" href="../index.php">Cancel</a>
                 </div>
             </form>
         </section>
