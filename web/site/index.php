@@ -2,7 +2,7 @@
 // Initialize session
 session_start();
 
-if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
+if (empty($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 	header('location: login.php');
 	exit;
 } else {
