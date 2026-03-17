@@ -33,14 +33,123 @@
 			Bienvenue <?php// echo $_SESSION['username']; ?>
 
 			<div class="account-management">
-				<a href="password_reset.php" class="btn btn-block btn-outline-warning"><img src="../static/icons/rotate-ccw-key.svg" alt="" srcset=""></a>
-				<a href="logout.php" class="btn btn-block btn-outline-danger"><img src="../static/icons/log-out.svg" alt="" srcset=""></a>
+				<a href="password_reset.php" class="btn btn-block btn-outline-warning"><img src="../static/icons/rotate-ccw-key.svg" alt=""></a>
+				<a href="logout.php" class="btn btn-block btn-outline-danger"><img src="../static/icons/log-out.svg" alt=""></a>
 			</div>
-			
+
         </div>
 
         <div class="sidebar">
             sidebar responsive
+
+			<div class="utils_menu">
+				<div class="utils_menu_icon">
+					<img src="../static/icons/home.svg" alt="">
+				</div>
+
+				<div class="utils_menu_icon">
+					<img src="../static/icons/settings.svg" alt="">
+				</div>
+
+				<div class="utils_menu_icon">
+					<img src="../static/icons/refresh.svg" alt="">
+				</div>
+
+				<div class="utils_menu_icon">
+					<img src="../static/icons/info-circle.svg" alt="">
+				</div>
+			</div>
+			
+
+			<div class="utils_block_title">
+				<span>Administration</span>
+				<div class="utils_block_icon">
+					<img src="../static/icons/panel-top-open.svg" alt="">
+				</div>
+			</div>
+
+			<div class="utils_block">
+				<div class="utils_block_icon">
+					<img src="../static/icons/brand-mysql.svg" alt="">
+				</div>
+				<div class="utils_block_text">
+					<span>PHPMyAdmin</span>
+				</div>
+			</div>
+
+			<div class="utils_block">
+				<div class="utils_block_icon">
+					<img src="../static/icons/zoom-code.svg" alt="">
+				</div>
+				<div class="utils_block_text">
+					<span>Centreon</span>
+				</div>
+			</div>
+
+			<div class="utils_block">
+				<div class="utils_block_icon">
+					<img src="../static/icons/network.svg" alt="">
+				</div>
+				<div class="utils_block_text">
+					<span>PfSense</span>
+				</div>
+			</div>
+
+
+
+			<div class="utils_block_title">
+				<span>Parc</span>
+				<div class="utils_block_icon">
+					<img src="../static/icons/panel-top-open.svg" alt="">
+				</div>
+			</div>
+
+			<div class="utils_block">
+				<div class="utils_block_icon">
+					<img src="../static/icons/house-plus.svg" alt="">
+				</div>
+				<div class="utils_block_text">
+					<span>Ajouter une serre</span>
+				</div>
+			</div>
+
+			<div class="utils_block">
+				<div class="utils_block_icon">
+					<img src="../static/icons/house-plus.svg" alt="">
+				</div>
+				<div class="utils_block_text">
+					<span>Voir les serres</span>
+				</div>
+			</div>
+
+
+
+			<div class="utils_block_title">
+				<span>Serre</span>
+				<div class="utils_block_icon">
+					<img src="../static/icons/panel-top-open.svg" alt="">
+				</div>
+			</div>
+
+			<div class="utils_block">
+				<div class="utils_block_icon">
+					<img src="../static/icons/grid-2x2-plus.svg" alt="">
+				</div>
+				<div class="utils_block_text">
+					<span>Ajouter un bac</span>
+				</div>
+			</div>
+
+			<div class="utils_block">
+				<div class="utils_block_icon">
+					<img src="../static/icons/plant.svg" alt="">
+				</div>
+				<div class="utils_block_text">
+					<span>Ajouter une culture</span>
+				</div>
+			</div>
+
+
         </div>
 
         <div class="content">
