@@ -50,6 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $hashed_password = $row['password'];
 
         if (password_verify($password, $hashed_password)) {
+          session_regenerate_id(true);
+          
           // Store data in session
           $_SESSION['loggedin'] = true;
           $_SESSION['id'] = $id;
