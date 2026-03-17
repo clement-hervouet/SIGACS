@@ -23,7 +23,7 @@
 
     <title>SIGACS - Tableau de bord</title>
 
-    <link rel="stylesheet" href="../static/css/style.css" />
+    <link rel="stylesheet" href="assets/static/css/style.css" />
 </head>
 
 <body>
@@ -33,8 +33,8 @@
 			Bienvenue <?php// echo $_SESSION['username']; ?>
 
 			<div class="account-management">
-				<a href="password_reset.php" class="btn btn-block btn-outline-warning"><img src="../static/icons/rotate-ccw-key.svg" alt=""></a>
-				<a href="logout.php" class="btn btn-block btn-outline-danger"><img src="../static/icons/log-out.svg" alt=""></a>
+				<a href="/connexions/password_reset.php" class="btn btn-block btn-outline-warning"><img src="../static/icons/rotate-ccw-key.svg" alt=""></a>
+				<a href="/connexions/logout.php" class="btn btn-block btn-outline-danger"><img src="../static/icons/log-out.svg" alt=""></a>
 			</div>
 
         </div>
