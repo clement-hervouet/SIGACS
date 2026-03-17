@@ -1,10 +1,10 @@
 <?php
-//// Initialize session
-//session_start();
-//
-//if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
-//	header('location: login.php');
-//	exit;
+// Initialize session
+session_start();
+
+if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
+	header('location: login.php');
+	exit;
 //}
 ?>
 <!doctype html>
@@ -30,7 +30,7 @@
     <div class="main">
         <div class="navbar">
             <h1>Tableau de bord du projet SIGACS</h1>
-			Bienvenue <?php// echo $_SESSION['username']; ?>
+			Bienvenue <?php echo $_SESSION['username']; ?>
 
 			<div class="account-management">
 				<a href="/connexions/password_reset.php" class="btn btn-block btn-outline-warning"><img src="../static/icons/rotate-ccw-key.svg" alt=""></a>
