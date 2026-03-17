@@ -11,4 +11,6 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     role     ENUM('admin','lecteur','editeur') DEFAULT 'lecteur'
+    nom VARCHAR(50) NOT NULL,
+    prenom VARCHAR(50) NOT NULL
 );
