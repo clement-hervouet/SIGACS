@@ -4,9 +4,9 @@ require_once '../config/config.php';
 
 
 // Define variables and initialize with empty values
-$username = $password = $confirm_password = "";
+$username = $password = $confirm_password = $nom = $prenom = "";
 
-$username_err = $password_err = $confirm_password_err = "";
+$username_err = $password_err = $confirm_password_err = $nom_err = $prenom_err = "";
 
 // Process submitted form data
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -46,6 +46,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		}
 	}
 
+	// Validate prenom
+	$raw_prenom = isset($_POST['prenom']) ? $_POST['prenom'] : null;
+	if (empty(trim($raw_prenom))) {
+		$prenom_err = "Please enter a first name.";
+	} else {
+		$param_prenom = sanitize_input($raw_prenom);
+		if (!is_safe_input($param_prenom) || !preg_match("/^[A-Za-zÀ-ÖØ-öø-ÿ' -]{1,50}$/u", $param_prenom)) {
+			$prenom_err = "Invalid first name format.";
+		} else {
+			$prenom = $param_prenom;
+		}
+	}
+
+	// Validate nom
+	$raw_nom = isset($_POST['nom']) ? $_POST['nom'] : null;
+	if (empty(trim($raw_nom))) {
+		$nom_err = "Please enter a last name.";
+	} else {
+		$param_nom = sanitize_input($raw_nom);
+		if (!is_safe_input($param_nom) || !preg_match("/^[A-Za-zÀ-ÖØ-öø-ÿ' -]{1,50}$/u", $param_nom)) {
+			$nom_err = "Invalid last name format.";
+		} else {
+			$nom = $param_nom;
+		}
+	}
+
 	// Validate password
 	if (empty(trim($_POST["password"]))) {
 		$password_err = "Please enter a password.";
@@ -66,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	}
 
 	// Check input error before inserting into database
-	if (empty($username_err) && empty($password_err) && empty($confirm_password_err)) {
+	if (empty($username_err) && empty($password_err) && empty($confirm_password_err) && empty($nom_err) && empty($prenom_err)) {
 		try {
 			// Ensure transaction started earlier during username check; if not, start one
 			if (!$pdo->inTransaction()) {
@@ -74,14 +100,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			}
 
 			// Prepare insert statement
-			$sql = 'INSERT INTO users (username, password) VALUES (?,?)';
+			$sql = 'INSERT INTO users (username, password, nom, prenom) VALUES (?,?,?,?)';
 			$stmt = $pdo->prepare($sql);
 
 			// Set parameters
 			$param_password = password_hash($password, PASSWORD_DEFAULT);
 
 			// Attempt to execute
-			if ($stmt->execute([$username, $param_password])) {
+			if ($stmt->execute([$username, $param_password, $nom, $prenom])) {
 				$pdo->commit();
 				header('location: ./login.php');
 				exit;
@@ -112,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	<title>Sign in</title>
 	<link href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/cosmo/bootstrap.min.css" rel="stylesheet" integrity="sha384-qdQEsAI45WFCO5QwXBelBe1rR9Nwiss4rGEqiszC+9olH1ScrLrMQr1KmDR964uZ" crossorigin="anonymous">
 	<link rel="stylesheet" href="../assets/static/css/style.css">
-	
+
 </head>
 
 <body>
@@ -125,6 +151,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 					<label for="username">Username</label>
 					<input type="text" name="username" id="username" class="form-control" value="<?php echo $username ?>">
 					<span class="help-block"><?php echo $username_err; ?></span>
+				</div>
+
+				<div class="form-group <?php (!empty($prenom_err)) ? 'has_error' : ''; ?>">
+					<label for="prenom">Prénom</label>
+					<input type="text" name="prenom" id="prenom" class="form-control" placeholder="Prénom" value="<?php echo htmlspecialchars($prenom); ?>">
+					<span class="help-block"><?php echo $prenom_err; ?></span>
+				</div>
+
+				<div class="form-group <?php (!empty($nom_err)) ? 'has_error' : ''; ?>">
+					<label for="nom">Nom</label>
+					<input type="text" name="nom" id="nom" class="form-control" placeholder="Nom" value="<?php echo htmlspecialchars($nom); ?>">
+					<span class="help-block"><?php echo $nom_err; ?></span>
 				</div>
 
 				<div class="form-group <?php (!empty($password_err)) ? 'has_error' : ''; ?>">
