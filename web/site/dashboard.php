@@ -33,8 +33,8 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
 			Bienvenue <?php echo $_SESSION['username']; ?>
 
 			<div class="account-management">
-				<a href="/connexions/password_reset.php" class="btn btn-block btn-outline-warning"><img src="../static/icons/rotate-ccw-key.svg" alt=""></a>
-				<a href="/connexions/logout.php" class="btn btn-block btn-outline-danger"><img src="../static/icons/log-out.svg" alt=""></a>
+				<a href="/connexions/password_reset.php" class="btn btn-block btn-outline-warning"><img src="assets/static/icons/rotate-ccw-key.svg" alt=""></a>
+				<a href="/connexions/logout.php" class="btn btn-block btn-outline-danger"><img src="assets/static/icons/log-out.svg" alt=""></a>
 			</div>
 
         </div>
