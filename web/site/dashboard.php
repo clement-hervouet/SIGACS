@@ -5,7 +5,7 @@ session_start();
 if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
 	header('location: login.php');
 	exit;
-//}
+}
 ?>
 <!doctype html>
 <html lang="fr">
@@ -33,8 +33,8 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
 			Bienvenue <?php echo $_SESSION['username']; ?>
 
 			<div class="account-management">
-				<a href="/connexions/password_reset.php" class="btn btn-block btn-outline-warning"><img src="../static/icons/rotate-ccw-key.svg" alt=""></a>
-				<a href="/connexions/logout.php" class="btn btn-block btn-outline-danger"><img src="../static/icons/log-out.svg" alt=""></a>
+				<a href="/connexions/password_reset.php" class="btn btn-block btn-outline-warning"><img src="assets/static/icons/rotate-ccw-key.svg" alt=""></a>
+				<a href="/connexions/logout.php" class="btn btn-block btn-outline-danger"><img src="assets/static/icons/log-out.svg" alt=""></a>
 			</div>
 
         </div>
@@ -44,19 +44,19 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
 
 			<div class="utils_menu">
 				<div class="utils_menu_icon">
-					<img src="static/icons/home.svg" alt="">
+					<img src="assets/static/icons/home.svg" alt="">
 				</div>
 
 				<div class="utils_menu_icon">
-					<img src="static/icons/settings.svg" alt="">
+					<img src="assets/static/icons/settings.svg" alt="">
 				</div>
 
 				<div class="utils_menu_icon">
-					<img src="static/icons/refresh.svg" alt="">
+					<img src="assets/static/icons/refresh.svg" alt="">
 				</div>
 
 				<div class="utils_menu_icon">
-					<img src="static/icons/info-circle.svg" alt="">
+					<img src="assets/static/icons/info-circle.svg" alt="">
 				</div>
 			</div>
 			
@@ -64,13 +64,13 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
 			<div class="utils_block_title">
 				<span>Administration</span>
 				<div class="utils_block_icon">
-					<img src="static/icons/panel-top-open.svg" alt="">
+					<img src="assets/static/icons/panel-top-open.svg" alt="">
 				</div>
 			</div>
 
 			<div class="utils_block">
 				<div class="utils_block_icon">
-					<img src="static/icons/brand-mysql.svg" alt="">
+					<img src="assets/static/icons/brand-mysql.svg" alt="">
 				</div>
 				<div class="utils_block_text">
 					<span>PHPMyAdmin</span>
@@ -79,7 +79,7 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
 
 			<div class="utils_block">
 				<div class="utils_block_icon">
-					<img src="static/icons/zoom-code.svg" alt="">
+					<img src="assets/static/icons/zoom-code.svg" alt="">
 				</div>
 				<div class="utils_block_text">
 					<span>Centreon</span>
@@ -88,7 +88,7 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
 
 			<div class="utils_block">
 				<div class="utils_block_icon">
-					<img src="static/icons/network.svg" alt="">
+					<img src="assets/static/icons/network.svg" alt="">
 				</div>
 				<div class="utils_block_text">
 					<span>PfSense</span>
@@ -100,13 +100,13 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
 			<div class="utils_block_title">
 				<span>Parc</span>
 				<div class="utils_block_icon">
-					<img src="static/icons/panel-top-open.svg" alt="">
+					<img src="assets/static/icons/panel-top-open.svg" alt="">
 				</div>
 			</div>
 
 			<div class="utils_block">
 				<div class="utils_block_icon">
-					<img src="static/icons/house-plus.svg" alt="">
+					<img src="assets/static/icons/house-plus.svg" alt="">
 				</div>
 				<div class="utils_block_text">
 					<span>Ajouter une serre</span>
@@ -115,7 +115,7 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
 
 			<div class="utils_block">
 				<div class="utils_block_icon">
-					<img src="static/icons/house-plus.svg" alt="">
+					<img src="assets/static/icons/house-plus.svg" alt="">
 				</div>
 				<div class="utils_block_text">
 					<span>Voir les serres</span>
@@ -127,13 +127,13 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
 			<div class="utils_block_title">
 				<span>Serre</span>
 				<div class="utils_block_icon">
-					<img src="static/icons/panel-top-open.svg" alt="">
+					<img src="assets/static/icons/panel-top-open.svg" alt="">
 				</div>
 			</div>
 
 			<div class="utils_block">
 				<div class="utils_block_icon">
-					<img src="static/icons/grid-2x2-plus.svg" alt="">
+					<img src="assets/static/icons/grid-2x2-plus.svg" alt="">
 				</div>
 				<div class="utils_block_text">
 					<span>Ajouter un bac</span>
@@ -142,7 +142,7 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
 
 			<div class="utils_block">
 				<div class="utils_block_icon">
-					<img src="static/icons/plant.svg" alt="">
+					<img src="assets/static/icons/plant.svg" alt="">
 				</div>
 				<div class="utils_block_text">
 					<span>Ajouter une culture</span>
