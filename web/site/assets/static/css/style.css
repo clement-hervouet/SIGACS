@@ -38,7 +38,7 @@ body {
 }
 
 .navbar {
-    grid-area: 1 / 1 / 2 / 3;
+    grid-area: 1 / 2 / 2 / 3;
 
     display: flex;
     flex-direction: column;
@@ -61,7 +61,7 @@ body {
 }
 
 .sidebar {
-    grid-area: 2 / 1 / 4 / 2;
+    grid-area: 1 / 1 / 4 / 2;
 
     display: flex;
     flex-direction: column;
