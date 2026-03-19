@@ -4,84 +4,89 @@
 #include <M5StickC.h>
 #include <Adafruit_Sensor.h>
 #include <DHT.h>
-#include "time.h"  
+#include <time.h>
 
-#define DHTPIN 33
+#define DHTPIN  33
 #define DHTTYPE DHT22
 
 const char* WIFI_SSID     = "Serre";
 const char* WIFI_PASSWORD = "stjolorient";
-const char* MQTT_SERVER   = "broker.hivemq.com";
-const int MQTT_PORT       = 1883;
+const char* MQTT_SERVER   = "192.168.42.65";
+const int   MQTT_PORT     = 1883;
 const char* MQTT_TOPIC    = "/serre/1/bac/1/air";
 
-// NTP E2
-const char* ntpServer = "0.pfsense.pool.ntp.org";
-
-WiFiClient espClient;
+WiFiClient   espClient;
 PubSubClient mqttClient(espClient);
-DHT dht(DHTPIN, DHTTYPE);
+DHT          dht(DHTPIN, DHTTYPE);
 
 void connectWiFi() {
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   Serial.print("Connexion WiFi");
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
-  Serial.println("\nWiFi OK");
+  Serial.println();
+  Serial.println("WiFi OK");
   Serial.print("IP : ");
   Serial.println(WiFi.localIP());
 }
 
 void syncNTP() {
-  
-  // Config avec routeur
-  configTime(3600, 3600, "192.168.42.65");
-  
+  configTime(0, 0, "pool.ntp.org", "192.168.42.65");
+  setenv("TZ", "CET-1CEST,M3.5.0,M10.5.0/3", 1);
+  tzset();
+
   struct tm timeinfo;
-  int tentatives = 0;
-  
-  // BOUCLE ATTENTE 10s max [web:276]
-  while (!getLocalTime(&timeinfo) && tentatives < 20) {
+  int retries = 0;
+  Serial.print("NTP");
+  while (!getLocalTime(&timeinfo) && retries < 40) {
     delay(500);
     Serial.print(".");
-    tentatives++;
+    retries++;
   }
-  
-  if (getLocalTime(&timeinfo)) {
-    Serial.printf("\n Heure: %02d:%02d %02d/%02d/%04d\n", 
-      timeinfo.tm_hour, timeinfo.tm_min, 
-      timeinfo.tm_mday, timeinfo.tm_mon+1, timeinfo.tm_year+1900);
+  Serial.println();
+
+  if (retries < 40) {
+    Serial.printf("NTP : %02d:%02d %02d/%02d/%04d\n",
+      timeinfo.tm_hour, timeinfo.tm_min,
+      timeinfo.tm_mday, timeinfo.tm_mon + 1, timeinfo.tm_year + 1900);
   } else {
-    Serial.println("\n Timeout NTP");
-    Serial.println("→ Vérif pfSense:");
-    Serial.println("  Services > NTP > Enable ON");
-    Serial.println("  Interfaces > LAN ON");
-    Serial.println("  Firewall > LAN > UDP/123 autorisé");
+    Serial.println("NTP timeout");
   }
 }
 
+void connectMQTT() {
+  String clientId = "M5-Air-";
+  clientId += String((uint32_t)ESP.getEfuseMac(), HEX);
 
-
-void connectMQTT() {}
+  Serial.print("MQTT");
+  if (mqttClient.connect(clientId.c_str())) {
+    Serial.println("\nMQTT OK");
+  } else {
+    Serial.printf("\nMQTT erreur : %d\n", mqttClient.state());
+  }
+}
 
 void setup() {
-  M5.begin();
   Serial.begin(115200);
-  
-  pinMode(DHTPIN, INPUT_PULLUP);
+  delay(1000);
+  M5.begin();
+  M5.Lcd.setRotation(3);
+  M5.Lcd.fillScreen(BLACK);
+  M5.Axp.SetLDO2(false);   
   dht.begin();
-  
+
   connectWiFi();
   syncNTP();
-  
+
   mqttClient.setServer(MQTT_SERVER, MQTT_PORT);
   connectMQTT();
 }
 
 void loop() {
   M5.update();
+
   if (!mqttClient.connected()) connectMQTT();
   mqttClient.loop();
 
@@ -89,12 +94,19 @@ void loop() {
   float tempAir = dht.readTemperature();
 
   if (!isnan(humAir) && !isnan(tempAir)) {
-    Serial.printf("T:%.1f°C H:%.1f%%\n", tempAir, humAir);
-    String payload = String(tempAir, 1) + ";" + String(humAir, 1);
-    mqttClient.publish(MQTT_TOPIC, payload.c_str());
+    Serial.printf("T: %.1f°C  H: %.1f%%\n", tempAir, humAir);
+
+    char payload[64];
+    snprintf(payload, sizeof(payload),
+      "{\"temperature\":%.1f,\"humidity\":%.1f}",
+      tempAir, humAir);
+
+    Serial.printf("Publish MQTT: %s -> %s\n", MQTT_TOPIC, payload);
+    mqttClient.publish(MQTT_TOPIC, payload);
+
   } else {
-    Serial.println("Erreur DHT22"); // Erreur de lecture du capteur
+    Serial.println("Erreur lecture DHT22");
   }
 
-  delay(5000);  // 5min ici mais 15min dans la version finale pour éviter de spammer le broker et économiser la batterie
+  delay(5000);
 }

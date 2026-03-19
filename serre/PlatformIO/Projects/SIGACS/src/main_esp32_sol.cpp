@@ -2,39 +2,53 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 #include <M5StickC.h>
-#include <time.h>  
+#include <time.h>
 
-#define SOIL_PIN   36   
+#define SOIL_PIN  32
+#define SOIL_DRY  4095
+#define SOIL_WET  0
 
 const char* WIFI_SSID     = "Serre";
 const char* WIFI_PASSWORD = "stjolorient";
-const char* MQTT_SERVER   = "192.168.42.65";  // local
-const int MQTT_PORT       = 1883;
+const char* MQTT_SERVER   = "192.168.42.65";
+const int   MQTT_PORT     = 1883;
 const char* MQTT_TOPIC    = "/serre/1/bac/1/sol";
 
-WiFiClient espClient;
+WiFiClient   espClient;
 PubSubClient mqttClient(espClient);
 
 void connectWiFi() {
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   Serial.print("Connexion WiFi");
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
-  Serial.println("\nWiFi OK");
+  Serial.println();
+  Serial.println("WiFi OK");
   Serial.print("IP : ");
   Serial.println(WiFi.localIP());
 }
 
-void syncNTP() {  
-  Serial.println("NTP...");
-  configTime(3600, 3600, "192.168.42.65");  // France + routeur
-  
+void syncNTP() {
+  configTime(0, 0, "pool.ntp.org", "192.168.42.65");
+  setenv("TZ", "CET-1CEST,M3.5.0,M10.5.0/3", 1);
+  tzset();
+
   struct tm timeinfo;
-  delay(2000); 
-  if (getLocalTime(&timeinfo)) {
-    Serial.printf("Heure: %02d:%02d\n", timeinfo.tm_hour, timeinfo.tm_min);
+  int retries = 0;
+  Serial.print("NTP");
+  while (!getLocalTime(&timeinfo) && retries < 40) {
+    delay(500);
+    Serial.print(".");
+    retries++;
+  }
+  Serial.println();
+
+  if (retries < 40) {
+    Serial.printf("NTP : %02d:%02d %02d/%02d/%04d\n",
+      timeinfo.tm_hour, timeinfo.tm_min,
+      timeinfo.tm_mday, timeinfo.tm_mon + 1, timeinfo.tm_year + 1900);
   } else {
     Serial.println("NTP timeout");
   }
@@ -43,43 +57,41 @@ void syncNTP() {
 void connectMQTT() {
   String clientId = "M5-Sol-";
   clientId += String((uint32_t)ESP.getEfuseMac(), HEX);
-  
-  Serial.print("MQTT...");
-   (mqttClient.connect(clientId.c_str()));
+  clientId += "-sol";  // ← unique, évite conflit avec M5-Air
+
+  mqttClient.connect(clientId.c_str());
 }
 
-
 void setup() {
-  M5.begin();
   Serial.begin(115200);
   delay(1000);
+  M5.begin();
+  M5.Lcd.setRotation(3);
+  M5.Lcd.fillScreen(BLACK);
+  M5.Axp.SetLDO2(false);
   analogSetAttenuation(ADC_11db);
+  pinMode(SOIL_PIN, INPUT);
 
   connectWiFi();
-  syncNTP();  
-  
+  syncNTP();
+
   mqttClient.setServer(MQTT_SERVER, MQTT_PORT);
   connectMQTT();
 }
 
 void loop() {
   M5.update();
+
   if (!mqttClient.connected()) connectMQTT();
   mqttClient.loop();
-  int raw = map(analogRead(SOIL_PIN), 0, 950, 0, 100);
-  Serial.print("Humidité Sol : ");
-  Serial.print(raw);
-  Serial.println(" %");
 
-  String payload = String(raw);
+  int raw = analogRead(SOIL_PIN);
+  Serial.printf("RAW : %d\n", raw);
+  int humidity = map(raw, SOIL_WET, SOIL_DRY, 0, 100);
+  humidity = constrain(humidity, 0, 100);
 
-  Serial.print("Publish MQTT: ");
-  Serial.print(MQTT_TOPIC);
-  Serial.print(" -> ");
-  Serial.println(payload);
+  Serial.printf("Humidité Sol : %d %%\n", humidity);
+  mqttClient.publish(MQTT_TOPIC, String(humidity).c_str());
 
-  mqttClient.publish(MQTT_TOPIC, payload.c_str());
-
-  delay(5000);  // 
+  delay(5000);
 }
-
