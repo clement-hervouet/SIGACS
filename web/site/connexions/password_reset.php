@@ -93,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <section>
             <h2>Reset Password</h2>
             <p>Please fill out this form to reset your password.</p>
-            <p>Connecté en temps que <?php echo $_SESSION['username']; ?></p>
+            <p>Connecté en tant que <?php echo $_SESSION['username']; ?></p>
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                 <div class="form-group <?php echo (!empty($new_password_err)) ? 'has-error' : ''; ?>">
                     <label>New Password</label>
