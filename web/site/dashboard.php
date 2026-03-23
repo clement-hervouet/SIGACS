@@ -24,6 +24,22 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
     <title>SIGACS - Tableau de bord</title>
 
     <link rel="stylesheet" type="text/css" href="assets/static/css/style.css" />
+	<script>
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.navigation_tree .line').forEach(line => {
+        line.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            const li = line.closest('li');
+            const childUl = li.querySelector(':scope > ul');
+            
+            if (!childUl) return;
+            
+            childUl.style.display = childUl.style.display === 'none' ? '' : 'none';
+        });
+    });
+});
+</script>
 </head>
 
 <body>
@@ -96,104 +112,37 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
 
 						<li>
 							<div class="line">
-								<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/square-plus.svg" alt=""></a>
-								<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/greenhouse.png" alt=""></a>
-								<a class="expander" href="#">Serre N°xx</a>
+								<img src="assets/static/icons/navigation_tree/square-plus.svg" alt="">
+								<img src="assets/static/icons/navigation_tree/greenhouse.png" alt="">
+								<a>Serre N°xx</a>
 							</div>
-							<ul>
+							<ul style="display: none;">
 								<li>
 									<div class="line">
-										<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/planter-box.png" alt=""></a>
-										<a class="expander" href="#">Bac N°xx</a>
+										<img src="assets/static/icons/navigation_tree/planter-box.png" alt="">
+										<a>Bac N°xx</a>
 									</div>
 								</li>
 								<li>
 									<div class="line">
-										<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/planter-box.png" alt=""></a>
-										<a class="expander" href="#">Bac N°xx</a>
+										<img src="assets/static/icons/navigation_tree/planter-box.png" alt="">
+										<a>Bac N°xx</a>
 									</div>
 								</li>
 								<li>
 									<div class="line">
-										<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/planter-box.png" alt=""></a>
-										<a class="expander" href="#">Bac N°xx</a>
+										<img src="assets/static/icons/navigation_tree/planter-box.png" alt="">
+										<a>Bac N°xx</a>
 									</div>
 								</li>
 								<li>
 									<div class="line">
-										<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/planter-box.png" alt=""></a>
-										<a class="expander" href="#">Bac N°xx</a>
+										<img src="assets/static/icons/navigation_tree/planter-box.png" alt="">
+										<a>Bac N°xx</a>
 									</div>
 								</li>
 							</ul>
 						</li>
-						<li>
-							<div class="line">
-								<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/square-plus.svg" alt=""></a>
-								<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/greenhouse.png" alt=""></a>
-								<a class="expander" href="#">Serre N°xx</a>
-							</div>
-							<ul>
-								<li>
-									<div class="line">
-										<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/planter-box.png" alt=""></a>
-										<a class="expander" href="#">Bac N°xx</a>
-									</div>
-								</li>
-								<li>
-									<div class="line">
-										<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/planter-box.png" alt=""></a>
-										<a class="expander" href="#">Bac N°xx</a>
-									</div>
-								</li>
-								<li>
-									<div class="line">
-										<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/planter-box.png" alt=""></a>
-										<a class="expander" href="#">Bac N°xx</a>
-									</div>
-								</li>
-								<li>
-									<div class="line">
-										<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/planter-box.png" alt=""></a>
-										<a class="expander" href="#">Bac N°xx</a>
-									</div>
-								</li>
-							</ul>
-						</li>
-						<li>
-							<div class="line">
-								<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/square-plus.svg" alt=""></a>
-								<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/greenhouse.png" alt=""></a>
-								<a class="expander" href="#">Serre N°xx</a>
-							</div>
-							<ul>
-								<li>
-									<div class="line">
-										<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/planter-box.png" alt=""></a>
-										<a class="expander" href="#">Bac N°xx</a>
-									</div>
-								</li>
-								<li>
-									<div class="line">
-										<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/planter-box.png" alt=""></a>
-										<a class="expander" href="#">Bac N°xx</a>
-									</div>
-								</li>
-								<li>
-									<div class="line">
-										<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/planter-box.png" alt=""></a>
-										<a class="expander" href="#">Bac N°xx</a>
-									</div>
-								</li>
-								<li>
-									<div class="line">
-										<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/planter-box.png" alt=""></a>
-										<a class="expander" href="#">Bac N°xx</a>
-									</div>
-								</li>
-							</ul>
-						</li>
-						
 						
 					</ul>
 				</div>
