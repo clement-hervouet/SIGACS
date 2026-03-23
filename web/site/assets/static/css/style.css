@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 :root {
     --primary-color: #00922A;
     --secondary-color: #00B0F0;
@@ -73,29 +75,57 @@ body {
 
     background-color: var(--secondary-color);
 
-    .utils_menu {
-        width: 100%;
-        height: fit-content;
+    .sidebar_header {
+
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
 
+        padding: 10px;
+        width: 100%;
+
         gap: 10px;
 
-        utils_menu_icon {
-            width: 2em;
-            height: 2em;
+        img {
+            width: 10em;
+        }
+    
 
-            img {
-                width: 100%;
-                height: 100%;
+        .greetings {
+            text-transform: uppercase;
+        }
 
-                filter: invert(1);
+        .utils_menu {
+            width: 100%;
+            height: fit-content;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+
+            gap: 10px;
+
+            .utils_menu_btn {
+                width: 2em;
+                height: 2em;
+
+                padding: 3px;
+
+                background-color: var(--info-color);
+
+                border: 1px solid var(--light-color);
+                border-radius: 5px;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+
+                    filter: invert(1);
+                }
             }
         }
     }
-
 
     .utils_block_title {
         width: 95%;

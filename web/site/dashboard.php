@@ -23,43 +23,65 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
 
     <title>SIGACS - Tableau de bord</title>
 
-    <link rel="stylesheet" href="assets/static/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="assets/static/css/style.css" />
 </head>
 
 <body>
     <div class="main">
         <div class="navbar">
             <h1>Tableau de bord du projet SIGACS</h1>
-			Bienvenue <?php echo $_SESSION['username']; ?>
-
-			<div class="account-management">
-				<a href="/connexions/password_reset.php" class="btn btn-block btn-outline-warning"><img src="assets/static/icons/rotate-ccw-key.svg" alt=""></a>
-				<a href="logout.php" class="btn btn-block btn-outline-danger"><img src="assets/static/icons/log-out.svg" alt=""></a>
-			</div>
 
         </div>
 
         <div class="sidebar">
-            sidebar responsive
-
-			<div class="utils_menu">
-				<div class="utils_menu_icon">
-					<img src="assets/static/icons/home.svg" alt="">
-				</div>
-
-				<div class="utils_menu_icon">
-					<img src="assets/static/icons/settings.svg" alt="">
-				</div>
-
-				<div class="utils_menu_icon">
-					<img src="assets/static/icons/refresh.svg" alt="">
-				</div>
-
-				<div class="utils_menu_icon">
-					<img src="assets/static/icons/info-circle.svg" alt="">
-				</div>
+			<div class="sidebar_header">
+				<img src="assets/static/logo.png" alt="logo SIGACS">
+			
+			<div class="greetings">
+				Bienvenue <?php echo $_SESSION['username']; ?>
 			</div>
 			
+
+				<div class="utils_menu">
+	
+					<a href="">
+						<div class="utils_menu_btn">
+							<img src="assets/static/icons/home.svg" alt="">
+						</div>
+					</a>
+	
+					<a href="/connexions/password_reset.php">
+						<div class="utils_menu_btn">
+							<img src="assets/static/icons/rotate-ccw-key.svg" alt="reset passwd">
+						</div>
+					</a>
+	
+					<a href="logout.php">
+						<div class="utils_menu_btn">
+							<img src="assets/static/icons/log-out.svg" alt="">
+						</div>
+					</a>
+	
+					<a href="">
+						<div class="utils_menu_btn">
+							<img src="assets/static/icons/settings.svg" alt="">
+						</div>
+					</a>
+	
+					<a href="">
+						<div class="utils_menu_btn">
+							<img src="assets/static/icons/refresh.svg" alt="">
+						</div>
+					</a>
+	
+					<a href="">
+						<div class="utils_menu_btn">
+							<img src="assets/static/icons/info-circle.svg" alt="">
+						</div>
+					</a>
+	
+				</div>
+			</div>
 
 			<div class="utils_block_title">
 				<span>Administration</span>
