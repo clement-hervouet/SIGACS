@@ -126,112 +126,134 @@ body {
             }
         }
     }
+}
+.navigation_tree {
+    background-color: var(--warning-color);
+    width: 100%;
 
-    .utils_block_title {
-        width: 95%;
-        outline: 1px solid white;
-        border-radius: 0 10px 10px 0;
-
-        background-color: var(--primary-color);
-
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-
-        padding: 8px;
-        padding-right: 10px;
-        padding-left: 20px;
-
-        color: white;
-        font-size: 1em;
-        font-weight: bold;
-
-        transition: ease-in-out 0.2s;
-
-        .utils_block_icon {
-            width: 2em;
-            height: 2em;
-
-            margin-left: auto;
-
-            justify-content: flex-end;
-
-            vertical-align: bottom;
-
-            img {
-                width: 100%;
-                height: 100%;
-
-                filter: invert(1);
-            }
-        }
-    }
-
-    .utils_block_title:hover {
-        filter: brightness(1.1);
-        transition: ease-in-out 0.2s;
-    }
-
-    .utils_block_title:click {
-        .utils_block_icon {
-            transform: rotate(-180deg);
-            transition: ease-in-out 0.4s;
-        }
-    }
-
-    .utils_block {
-        width: 90%;
-        outline: 1px solid white;
-        border-radius: 0 10px 10px 0;
-
-        background-color: var(--dark-color);
-
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-
-        gap: 10px;
-
-        padding: 6px;
-        padding-right: 10px;
-        padding-left: 40px;
-
-        font-size: 0.8em;
-
-        cursor: pointer ;
-
-        transition: ease-in-out 0.2s;
-            
-        .utils_block_icon {
-            width: 2em;
-            height: 2em;
-
-            vertical-align: bottom;
-
-            img {
-                width: 100%;
-                height: 100%;
-
-                filter: invert(1);
-            }
-        }
-
-        .utils_block_text {
-            color: white;
-            display: inline-block;
-            vertical-align: middle;
-            line-height: normal;
-        }
-    }
-
-    .utils_block:hover {
-        filter: brightness(2);
-        transition: ease-in-out 0.2s;
-        transform: scale(1.03);
+    ul {
+        list-style: none !important;
+        margin: 0;
+        padding: 0;
     }
 }
+
+/* ── LEVEL 1: vertical line connecting serre siblings ── */
+.navigation_tree_content > ul {
+    position: relative;
+    margin-left: 1.5em;
+}
+
+.navigation_tree_content > ul > li {
+    position: relative;
+    padding-left: 12px;
+}
+
+/* trunk drawn per li, covers full height including children */
+.navigation_tree_content > ul > li::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #aaa;
+    z-index: 0;
+}
+
+/* last serre: trunk stops at row midpoint */
+.navigation_tree_content > ul > li:last-child::after {
+    bottom: calc(100% - 11px);
+}
+
+/* horizontal branch to each serre */
+.navigation_tree_content > ul > li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 11px;
+    width: 10px;
+    height: 2px;
+    background: #aaa;
+    z-index: 1;
+}
+
+/* rounded elbow on last serre */
+.navigation_tree_content > ul > li:last-child::before {
+    background: none;
+    height: 11px;
+    top: 0;
+    border-left:   2px solid #aaa;
+    border-bottom: 2px solid #aaa;
+}
+
+/* ── LEVEL 2: vertical line connecting bac children ── */
+.navigation_tree_content > ul > li > ul {
+    position: relative;
+    margin-left: 2.5em;
+}
+
+.navigation_tree_content > ul > li > ul > li {
+    position: relative;
+    padding-left: 12px;
+}
+
+/* trunk drawn per li, covers full height */
+.navigation_tree_content > ul > li > ul > li::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #aaa;
+    z-index: 0;
+}
+
+/* last bac: trunk stops at row midpoint */
+.navigation_tree_content > ul > li > ul > li:last-child::after {
+    bottom: calc(100% - 11px);
+}
+
+/* horizontal branch to each bac */
+.navigation_tree_content > ul > li > ul > li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 11px;
+    width: 10px;
+    height: 2px;
+    background: #aaa;
+    z-index: 1;
+}
+
+/* rounded elbow on last bac */
+.navigation_tree_content > ul > li > ul > li:last-child::before {
+    background: none;
+    height: 11px;
+    top: 0;
+    border-left:   2px solid #aaa;
+    border-bottom: 2px solid #aaa;
+}
+
+/* ── row layout ── */
+.line {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    padding-bottom: 6px;
+    gap: 6px;
+
+    img { width: 1.5em; display: block; }
+
+    a           { text-decoration: none !important;      color: black; }
+    a:hover     { text-decoration: underline !important; color: black; }
+    a:visited   { text-decoration: none !important;      color: black; }
+}
+
+
+
 
 .content {
     grid-area: 2 / 2 / 3 / 3;

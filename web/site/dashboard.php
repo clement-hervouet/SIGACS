@@ -37,9 +37,9 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
 			<div class="sidebar_header">
 				<img src="assets/static/logo.png" alt="logo SIGACS">
 			
-			<div class="greetings">
-				Bienvenue <?php echo $_SESSION['username']; ?>
-			</div>
+				<div class="greetings">
+					Bienvenue <?php echo $_SESSION['username']; ?>
+				</div>
 			
 
 				<div class="utils_menu">
@@ -83,94 +83,121 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
 				</div>
 			</div>
 
-			<div class="utils_block_title">
-				<span>Administration</span>
-				<div class="utils_block_icon">
-					<img src="assets/static/icons/panel-top-open.svg" alt="">
+			<div class="navigation_tree">
+				<!--contenu admin eventuel-->
+				<div class="navigation_tree_content">
+					<ul>
+						<li class="first new_serre">
+							<div class="line">
+								<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/house-plus.svg" alt=""></a>
+								<a class="expander" href="">Ajouter une nouvelle serre</a>
+							</div>
+						</li>
+
+						<li>
+							<div class="line">
+								<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/square-plus.svg" alt=""></a>
+								<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/greenhouse.png" alt=""></a>
+								<a class="expander" href="#">Serre N°xx</a>
+							</div>
+							<ul>
+								<li>
+									<div class="line">
+										<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/planter-box.png" alt=""></a>
+										<a class="expander" href="#">Bac N°xx</a>
+									</div>
+								</li>
+								<li>
+									<div class="line">
+										<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/planter-box.png" alt=""></a>
+										<a class="expander" href="#">Bac N°xx</a>
+									</div>
+								</li>
+								<li>
+									<div class="line">
+										<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/planter-box.png" alt=""></a>
+										<a class="expander" href="#">Bac N°xx</a>
+									</div>
+								</li>
+								<li>
+									<div class="line">
+										<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/planter-box.png" alt=""></a>
+										<a class="expander" href="#">Bac N°xx</a>
+									</div>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<div class="line">
+								<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/square-plus.svg" alt=""></a>
+								<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/greenhouse.png" alt=""></a>
+								<a class="expander" href="#">Serre N°xx</a>
+							</div>
+							<ul>
+								<li>
+									<div class="line">
+										<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/planter-box.png" alt=""></a>
+										<a class="expander" href="#">Bac N°xx</a>
+									</div>
+								</li>
+								<li>
+									<div class="line">
+										<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/planter-box.png" alt=""></a>
+										<a class="expander" href="#">Bac N°xx</a>
+									</div>
+								</li>
+								<li>
+									<div class="line">
+										<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/planter-box.png" alt=""></a>
+										<a class="expander" href="#">Bac N°xx</a>
+									</div>
+								</li>
+								<li>
+									<div class="line">
+										<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/planter-box.png" alt=""></a>
+										<a class="expander" href="#">Bac N°xx</a>
+									</div>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<div class="line">
+								<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/square-plus.svg" alt=""></a>
+								<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/greenhouse.png" alt=""></a>
+								<a class="expander" href="#">Serre N°xx</a>
+							</div>
+							<ul>
+								<li>
+									<div class="line">
+										<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/planter-box.png" alt=""></a>
+										<a class="expander" href="#">Bac N°xx</a>
+									</div>
+								</li>
+								<li>
+									<div class="line">
+										<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/planter-box.png" alt=""></a>
+										<a class="expander" href="#">Bac N°xx</a>
+									</div>
+								</li>
+								<li>
+									<div class="line">
+										<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/planter-box.png" alt=""></a>
+										<a class="expander" href="#">Bac N°xx</a>
+									</div>
+								</li>
+								<li>
+									<div class="line">
+										<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/planter-box.png" alt=""></a>
+										<a class="expander" href="#">Bac N°xx</a>
+									</div>
+								</li>
+							</ul>
+						</li>
+						
+						
+					</ul>
 				</div>
 			</div>
-
-			<div class="utils_block">
-				<div class="utils_block_icon">
-					<img src="assets/static/icons/brand-mysql.svg" alt="">
-				</div>
-				<div class="utils_block_text">
-					<span>PHPMyAdmin</span>
-				</div>
-			</div>
-
-			<div class="utils_block">
-				<div class="utils_block_icon">
-					<img src="assets/static/icons/zoom-code.svg" alt="">
-				</div>
-				<div class="utils_block_text">
-					<span>Centreon</span>
-				</div>
-			</div>
-
-			<div class="utils_block">
-				<div class="utils_block_icon">
-					<img src="assets/static/icons/network.svg" alt="">
-				</div>
-				<div class="utils_block_text">
-					<span>PfSense</span>
-				</div>
-			</div>
-
-
-
-			<div class="utils_block_title">
-				<span>Parc</span>
-				<div class="utils_block_icon">
-					<img src="assets/static/icons/panel-top-open.svg" alt="">
-				</div>
-			</div>
-
-			<div class="utils_block">
-				<div class="utils_block_icon">
-					<img src="assets/static/icons/house-plus.svg" alt="">
-				</div>
-				<div class="utils_block_text">
-					<span>Ajouter une serre</span>
-				</div>
-			</div>
-
-			<div class="utils_block">
-				<div class="utils_block_icon">
-					<img src="assets/static/icons/house-plus.svg" alt="">
-				</div>
-				<div class="utils_block_text">
-					<span>Voir les serres</span>
-				</div>
-			</div>
-
-
-
-			<div class="utils_block_title">
-				<span>Serre</span>
-				<div class="utils_block_icon">
-					<img src="assets/static/icons/panel-top-open.svg" alt="">
-				</div>
-			</div>
-
-			<div class="utils_block">
-				<div class="utils_block_icon">
-					<img src="assets/static/icons/grid-2x2-plus.svg" alt="">
-				</div>
-				<div class="utils_block_text">
-					<span>Ajouter un bac</span>
-				</div>
-			</div>
-
-			<div class="utils_block">
-				<div class="utils_block_icon">
-					<img src="assets/static/icons/plant.svg" alt="">
-				</div>
-				<div class="utils_block_text">
-					<span>Ajouter une culture</span>
-				</div>
-			</div>
-
 
         </div>
 
