@@ -1,0 +1,69 @@
+:root {
+    --new-color: #00a300;
+    --new-light-color: #2adb2a;
+    --new-lighter-color: #65ff65;
+    --new-dark-color: #007700;
+    --new-darker-color: #004900;
+    
+    --edit-color: #0067a3;
+    --edit-light-color: #1b86c4;
+    --edit-lighter-color: #5dc2fd;
+    --edit-dark-color: #003f64;
+    --edit-darker-color: #002337;
+}
+
+:root .new {
+    --color: var(--new-color);
+    --light-color: var(--new-light-color);
+    --lighter-color: var(--new-lighter-color);
+    --dark-color: var(--new-dark-color);
+    --darker-color: var(--new-darker-color);
+}
+
+:root .edit {
+    --color: var(--edit-color);
+    --light-color: var(--edit-light-color);
+    --lighter-color: var(--edit-lighter-color);
+    --dark-color: var(--edit-dark-color);
+    --darker-color: var(--edit-darker-color);
+}
+
+
+
+body {
+    height: 100vh;
+    width: 1900px;
+
+    box-sizing: border-box;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-items: center;
+
+    height: fit-content;
+    width: 50%;
+    margin-top: 35px;
+    margin-left: 25%;
+    margin-right: 25%;
+
+    border: 3px solid black;
+    border-radius: 30px;
+
+    .form_header {
+        padding: 15px;
+        background-color: var(--color);
+
+        border-radius: 30px 30px 0 0;
+    }
+
+    .form_content {
+
+    }
+}
+
+.edit {
+    background-color: var(--edit-color);
+}
