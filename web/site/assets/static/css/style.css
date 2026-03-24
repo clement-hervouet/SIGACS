@@ -236,6 +236,16 @@ body {
     border-bottom: 2px solid #aaa;
 }
 
+.navigation_tree ul ul {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.5s ease-in-out;
+}
+
+.navigation_tree ul ul.open {
+    max-height: 500px; /* large enough to fit any expanded content */
+}
+
 /* ── row layout ── */
 .line {
     display: flex;
@@ -249,9 +259,9 @@ body {
     
     img { width: 1.5em; display: block; }
 
-    a           { text-decoration: none !important;      color: black; }
-    a:hover     { text-decoration: underline !important; color: black; }
-    a:visited   { text-decoration: none !important;      color: black; }
+    a           { text-decoration: none !important;      color: black !important; }
+    a:hover     { text-decoration: underline !important; color: black !important; }
+    a:visited   { text-decoration: none !important;      color: black !important; }
 }
 
 

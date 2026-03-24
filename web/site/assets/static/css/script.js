@@ -8,7 +8,15 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (!childUl) return;
             
-            childUl.style.display = childUl.style.display === 'none' ? '' : 'none';
+            const isOpen = childUl.classList.contains('open');
+            childUl.classList.toggle('open');
+
+            const toggleImg = line.querySelector('img[src*="square"]');
+            if (toggleImg) {
+                toggleImg.src = isOpen
+                    ? 'assets/static/icons/navigation_tree/square-plus.svg'
+                    : 'assets/static/icons/navigation_tree/square-minus.svg';
+            }
         });
     });
 });

@@ -101,7 +101,7 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
 								<img src="assets/static/icons/navigation_tree/greenhouse.png" alt="">
 								<a>Serre N°xx</a>
 							</div>
-							<ul style="display: none;">
+							<ul>
 								<li>
 									<div class="line">
 										<img src="assets/static/icons/navigation_tree/planter-box.png" alt="">
@@ -128,6 +128,7 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
 								</li>
 							</ul>
 						</li>
+						
 						
 					</ul>
 				</div>
