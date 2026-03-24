@@ -24,22 +24,7 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
     <title>SIGACS - Tableau de bord</title>
 
     <link rel="stylesheet" type="text/css" href="assets/static/css/style.css" />
-	<script>
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.navigation_tree .line').forEach(line => {
-        line.addEventListener('click', (e) => {
-            e.preventDefault();
-            
-            const li = line.closest('li');
-            const childUl = li.querySelector(':scope > ul');
-            
-            if (!childUl) return;
-            
-            childUl.style.display = childUl.style.display === 'none' ? '' : 'none';
-        });
-    });
-});
-</script>
+	<script src="assets/static/css/script.js"></script>
 </head>
 
 <body>
