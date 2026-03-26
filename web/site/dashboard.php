@@ -104,6 +104,12 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
 							<ul>
 								<li>
 									<div class="line">
+										<img src="assets/static/icons/navigation_tree/grid-2x2-plus.svg" alt="">
+										<a>Ajouter un nouveau bac</a>
+									</div>
+								</li>
+								<li>
+									<div class="line">
 										<img src="assets/static/icons/navigation_tree/planter-box.png" alt="">
 										<a>Bac N°xx</a>
 									</div>
