@@ -54,13 +54,15 @@ body {
           padding: var(--form-padding);
         
           border-radius: 30px 30px 0 0;
+
+          text-align: center;
         }
 
         /* form Body */
         .form-body {
             padding: var(--form-padding);
 
-            .input {
+            .input:not(:last-child) {
                 display: flex;
                 flex-direction: column;
 
@@ -85,6 +87,11 @@ body {
           padding: var(--form-padding);
         
           border-radius: 0 0 30px 30px;
+
+          text-align: center;
+
+          .cancel {background-color: var(--invalid-color); padding: 6px; border-radius: 3px;}
+          .submit {background-color: var(--valid-color); padding: 6px; border-radius: 3px;}
         }
     }
 }
