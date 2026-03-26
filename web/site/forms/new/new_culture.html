@@ -1,21 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>form</title>
+    <script src="../forms.js"></script>
 
     <link rel="stylesheet" href="../forms.css">
 </head>
 <body>
-    <div class="form edit">
-        <div class="form_header">
-            Nouvelle serre
-        </div>
+    <div class="form edit" id="formModal">
+        <div class="form-content ">
+            <div class="form-header">
+                Nouvelle serre
+            </div>
 
-        <div class="form_content">
-            <label for="surface">Surface</label>
-            <input type="number" step="0.1" id="totalAmt">
+            <div class="form-body">
+
+                <div class="input">
+                    <label for="nom">Nom</label>
+                    <input type="text" minlength="5" maxlength="25" required name="nom" id="nom">
+                </div>
+
+                <div class="input">
+                    <label for="surface">Surface</label>
+                    <input type="number" min="0.1" step="0.1" id="surface">
+                </div>
+
+            </div>
+            <div class="form-footer">
+                footer
+            </div>
         </div>
     </div>
 </body>
