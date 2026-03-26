@@ -1,0 +1,75 @@
+<div class="form new" id="newSerreForm">
+  <div class="form-content">
+    <form action="new_serre.php" method="post">
+      <div class="form-header">
+        <h2>Nouvelle serre</h2>
+      </div>
+
+      <div class="form-body">
+      
+        <div class="input">
+          <label for="nom">Nom</label>
+          <input
+            type="text"
+            minlength="5"
+            maxlength="25"
+            placeholder="Serre de Riri"
+            required
+            name="nom"
+            id="nom"
+          />
+        </div>
+
+        <div class="input">
+          <label for="nom">Localisation</label>
+          <input
+            type="text"
+            minlength="5"
+            maxlength="25"
+            placeholder="13 rue Couac, DonaldVille"
+            name="addresse"
+            id="adresse"
+          />
+        </div>
+
+        <div class="input">
+          <label for="nom">Surface exploitable</label>
+          <input
+            type="number"
+            step="0.1"
+            min="0.1"
+            placeholder="Surface exploitable en m²"
+            required
+            name="surface"
+            id="surface"
+          />
+        </div>
+
+        <div class="input">
+          <label for="nom">Nombre de bac(s)</label>
+          <input
+            type="number"
+            step="1"
+            min="1"
+            placeholder="Nombre de bac(s)"
+            required
+            name="bac"
+            id="bac"
+          />
+          <span><i>Vous pourrez toujours ajouter des bacs plus tard.</i></span>
+        </div>
+
+        <div class="input">
+          <input type="submit" hidden />
+        </div>
+
+      </div>
+
+        <div class="form-footer">
+          <input class="cancel" type="button" value="annuler" id="formCancel" />
+          <input class="submit" type="submit" value="valider" id="formSubmit" />
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

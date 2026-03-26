@@ -1,30 +1,40 @@
-// Get the modal
-var modal = document.getElementById("formModal");
+document.addEventListener('DOMContentLoaded', () => {
 
-// Get the button that opens the modal
-var editBtn = document.getElementById("editBtn");
-var newBtn = document.getElementById("newBtn");
+// Container injected into the page to hold the loaded modal
+var modalContainer = document.getElementById("modalContainer");
 
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
+function openModal(file) {
+  fetch(file)
+    .then(function(response) { return response.text(); })
+    .then(function(html) {
+      modalContainer.innerHTML = html;
+      modalContainer.style.display = "block";
 
-// When the user clicks on the button, open the modal
-editBtn.onclick = function() {
-  form.style.display = "block";
+      // Bind cancel button inside the freshly loaded modal
+      var cancel = modalContainer.querySelector(".cancel");
+      if (cancel) cancel.onclick = closeModal;
+    });
 }
 
-newBtn.onclick = function() {
-  form.style.display = "block";
+function closeModal() {
+  modalContainer.style.display = "none";
+  modalContainer.innerHTML = "";
 }
 
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  form.style.display = "none";
-}
+// Nav buttons
+var newSerreBtn = document.getElementById("newSerreBtn");
+var newBacBtn = document.getElementById("newBacBtn");
+var newCultureBtn = document.getElementById("newCultureBtn");
 
-// When the user clicks anywhere outside of the modal, close it
+if (newSerreBtn) newSerreBtn.onclick = function() { openModal("forms/new/new_serre.html");}
+if (newBacBtn)   newBacBtn.onclick   = function() { openModal("forms/new/new_bac.html"); }
+if (newCultureBtn) newCultureBtn.onclick = function() { openModal("forms/new/new_culture.html"); }
+
+// Click outside the modal content to close
 window.onclick = function(event) {
-  if (event.target == form) {
-    form.style.display = "none";
+  if (event.target == modalContainer) {
+    closeModal();
   }
 }
+
+});

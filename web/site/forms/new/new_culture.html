@@ -1,38 +1,100 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>form</title>
-    <script src="../forms.js"></script>
+<div class="form new" id="formModal">
+  <div class="form-content">
+    <form action="new_culture.html" method="post">
+      <div class="form-header">
+        <h2>Nouvelle culture</h2>
+      </div>
 
-    <link rel="stylesheet" href="../forms.css">
-</head>
-<body>
-    <div class="form edit" id="formModal"> <!--une fois les tests terminé, enlever la class suplémentaire à form: elle sera ajouté via le js en fonction du bouton-->
-        <div class="form-content ">
-            <div class="form-header">
-                <h2>Nouvelle culture</h2>
-            </div>
-
-            <div class="form-body">
-
-                <div class="input">
-                    <label for="nom">Nom</label>
-                    <input type="text" minlength="5" maxlength="25" placeholder="Serre de Riri" required name="nom" id="nom">
-                </div>
-
-                <div class="input">
-                    <input type="submit" hidden>
-                </div>
-
-            </div>
-            <div class="form-footer">
-                <input class="cancel" type="button" value="annuler" id="formCancel">
-                <input class="submit" type="submit" value="valider" id="formSubmit">
-            </div>
+      <div class="form-body">
+        <div class="input">
+          <label for="nom">Nom</label>
+          <input
+            type="text"
+            minlength="5"
+            maxlength="25"
+            placeholder="Serre de Riri"
+            required
+            name="nom"
+            id="nom"
+          />
         </div>
-    </div>
-</body>
-</html>
 
+        <div class="input">
+          <label for="nom">Nom en Latin</label>
+          <input
+            type="text"
+            minlength="5"
+            maxlength="25"
+            placeholder="Serre de Riri"
+            required
+            name="nom"
+            id="nom"
+          />
+        </div>
+
+        <div class="input">
+          <div class="humidite-ambiante">
+            <div class="minimum">
+              <label for="humidite-ambiante">Humidité ambiante minimum</label>
+              <input type="number" name="humidite-ambiante" id="humdite-ambiante">
+            </div>
+            <div class="maximum">
+              <label for="humidite-ambiante">Humidité ambiante maximum</label>
+              <input type="number" name="humidite-ambiante" id="humdite-ambiante">
+            </div>
+            <div class="optimal">
+              <label for="humidite-ambiante">Humidité ambiante optimal</label>
+              <input type="number" name="humidite-ambiante" id="humdite-ambiante">
+            </div>
+          </div>
+          
+          <div class="humidite-sol">
+            <div class="minimum">
+              <label for="humidite-sol">Humidité du sol minimum</label>
+              <input type="number" name="humidite-sol" id="humidite-sol">
+            </div>
+            <div class="maximum">
+              <label for="humidite-sol">Humidité du sol maximum</label>
+              <input type="number" name="humidite-sol" id="humidite-sol">
+            </div>
+            <div class="optimal">
+              <label for="humidite-sol">Humidité du sol optimal</label>
+              <input type="number" name="humidite-sol" id="humidite-sol">
+            </div>
+          </div>
+
+          <div class="temperature-ambiante">
+            <div class="minimum">
+              <label for="temperature-ambiante">Température ambiante minimum</label>
+              <input type="number" name="temperature-ambiante" id="">
+            </div>
+            <div class="maximum">
+              <label for="temperature-ambiante">Température ambiante maximum</label>
+              <input type="number" name="temperature-ambiante" id="">
+            </div>
+            <div class="optimal">
+              <label for="temperature-ambiante">Température ambiante optimal</label>
+              <input type="number" name="temperature-ambiante" id="">
+            </div>
+          </div>
+
+        </div>
+        
+        <div class="input">
+          <div class="temps">
+            <label for="temps">Temps de pousse usuel en jours</label>
+            <input type="number" name="temps" id="temps">
+          </div>
+        </div>
+
+        <div class="input">
+          <input type="submit" hidden />
+        </div>
+      </div>
+      <div class="form-footer">
+        <input class="cancel" type="button" value="annuler" id="formCancel" />
+        <input class="submit" type="submit" value="valider" id="formSubmit" />
+      </div>
+    </form>
+  </div>
+</div>

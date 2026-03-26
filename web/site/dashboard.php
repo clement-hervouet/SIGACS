@@ -24,7 +24,8 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
     <title>SIGACS - Tableau de bord</title>
 
     <link rel="stylesheet" type="text/css" href="assets/static/css/style.css" />
-	<script src="assets/static/css/script.js"></script>
+	<script src="assets/static/css/script.js"></script>	
+	<script src="forms/forms.js"></script>
 </head>
 
 <body>
@@ -88,10 +89,10 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
 				<!--contenu admin eventuel-->
 				<div class="navigation_tree_content">
 					<ul>
-						<li class="first new_serre">
-							<div class="line">
-								<a class="expander" href="#"><img src="assets/static/icons/navigation_tree/house-plus.svg" alt=""></a>
-								<a class="expander" href="">Ajouter une nouvelle serre</a>
+						<li>
+							<div class="line" id="newSerreBtn">
+								<img src="assets/static/icons/navigation_tree/house-plus.svg" alt="">
+								<a>Ajouter une nouvelle serre</a>
 							</div>
 						</li>
 
@@ -103,7 +104,7 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
 							</div>
 							<ul>
 								<li>
-									<div class="line">
+									<div class="line" id="newBacBtn">
 										<img src="assets/static/icons/navigation_tree/grid-2x2-plus.svg" alt="">
 										<a>Ajouter un nouveau bac</a>
 									</div>
@@ -134,7 +135,42 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
 								</li>
 							</ul>
 						</li>
-						
+
+						<li>
+							<div class="line" id="newCultureBtn">
+								<img src="assets/static/icons/navigation_tree/plant-plus.svg" alt="">
+								<a>Ajouter une nouvelle culture</a>
+							</div>
+						</li>
+
+						<li>
+							<div class="line">
+								<img src="assets/static/icons/navigation_tree/square-plus.svg" alt="">
+								<img src="/assets/static/icons/navigation_tree/potted-plant-icon.png" alt="">
+								<a>Liste des cultures disponibles</a>
+							</div>
+							<ul>
+								<li>
+									<div class="line">
+										<img src="assets/static/icons/navigation_tree/potted-plant-icon.png" alt="">
+										<a>Nom de la culture 1</a>
+									</div>
+								</li>
+								<li>
+									<div class="line">
+										<img src="assets/static/icons/navigation_tree/potted-plant-icon.png" alt="">
+										<a>Nom de la culture 2</a>
+									</div>
+								</li>
+								<li>
+									<div class="line">
+										<img src="assets/static/icons/navigation_tree/potted-plant-icon.png" alt="">
+										<a>Nom de la culture 3</a>
+									</div>
+								</li>
+
+							</ul>
+						</li>
 						
 					</ul>
 				</div>
@@ -152,6 +188,9 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
             <span><i>BTS CIEL – Saint Joseph LaSalle – Lorient</i></span>
         </div>
     </div>
+
+	<div id="modalContainer" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000;"></div>
+
 </body>
 
 </html>
