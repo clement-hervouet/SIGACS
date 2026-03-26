@@ -152,6 +152,8 @@ body {
     background-color: var(--warning-color);
     width: 100%;
 
+    padding-top: 10px;
+
     ul {
         list-style: none !important;
         margin: 0;
