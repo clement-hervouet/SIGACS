@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 :root {
     --primary-color: #00922A;
     --secondary-color: #00B0F0;
@@ -10,6 +12,27 @@
 
     --light-color: #DBF0CC;
     --dark-color: #2A4914;
+
+    /* couleurs des forms*/
+
+    --new-color: #00a300;
+    --new-light-color: #2adb2a;
+    --new-lighter-color: #bbffbb;
+    --new-dark-color: #007700;
+    --new-darker-color: #004900;
+    
+    --edit-color: #0067a3;
+    --edit-light-color: #1b86c4;
+    --edit-lighter-color: #aae0ff;
+    --edit-dark-color: #003f64;
+    --edit-darker-color: #002337;
+
+    --form-padding: 15px;
+
+    --valid-color: green;
+    --invalid-color: red;
+
+
 
     --font-family: 'Ubuntu', sans-serif;
 }
@@ -38,7 +61,7 @@ body {
 }
 
 .navbar {
-    grid-area: 1 / 1 / 2 / 3;
+    grid-area: 1 / 2 / 2 / 3;
 
     display: flex;
     flex-direction: column;
@@ -61,7 +84,7 @@ body {
 }
 
 .sidebar {
-    grid-area: 2 / 1 / 4 / 2;
+    grid-area: 1 / 1 / 4 / 2;
 
     display: flex;
     flex-direction: column;
@@ -73,135 +96,199 @@ body {
 
     background-color: var(--secondary-color);
 
-    .utils_menu {
-        width: 100%;
-        height: fit-content;
+    .sidebar_header {
+
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
 
-        gap: 10px;
-
-        utils_menu_icon {
-            width: 2em;
-            height: 2em;
-
-            img {
-                width: 100%;
-                height: 100%;
-
-                filter: invert(1);
-            }
-        }
-    }
-
-
-    .utils_block_title {
-        width: 95%;
-        outline: 1px solid white;
-        border-radius: 0 10px 10px 0;
-
-        background-color: var(--primary-color);
-
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-
-        padding: 8px;
-        padding-right: 10px;
-        padding-left: 20px;
-
-        color: white;
-        font-size: 1em;
-        font-weight: bold;
-
-        transition: ease-in-out 0.2s;
-
-        .utils_block_icon {
-            width: 2em;
-            height: 2em;
-
-            margin-left: auto;
-
-            justify-content: flex-end;
-
-            vertical-align: bottom;
-
-            img {
-                width: 100%;
-                height: 100%;
-
-                filter: invert(1);
-            }
-        }
-    }
-
-    .utils_block_title:hover {
-        filter: brightness(1.1);
-        transition: ease-in-out 0.2s;
-    }
-
-    .utils_block_title:click {
-        .utils_block_icon {
-            transform: rotate(-180deg);
-            transition: ease-in-out 0.4s;
-        }
-    }
-
-    .utils_block {
-        width: 90%;
-        outline: 1px solid white;
-        border-radius: 0 10px 10px 0;
-
-        background-color: var(--dark-color);
-
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
+        padding: 10px;
+        width: 100%;
 
         gap: 10px;
 
-        padding: 6px;
-        padding-right: 10px;
-        padding-left: 40px;
+        img {
+            width: 10em;
+        }
+    
 
-        font-size: 0.8em;
+        .greetings {
+            text-transform: uppercase;
+        }
 
-        cursor: pointer ;
+        .utils_menu {
+            width: 100%;
+            height: fit-content;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
 
-        transition: ease-in-out 0.2s;
-            
-        .utils_block_icon {
-            width: 2em;
-            height: 2em;
+            gap: 10px;
 
-            vertical-align: bottom;
+            .utils_menu_btn {
+                width: 2em;
+                height: 2em;
 
-            img {
-                width: 100%;
-                height: 100%;
+                padding: 3px;
 
-                filter: invert(1);
+                background-color: var(--info-color);
+
+                border: 1px solid var(--light-color);
+                border-radius: 5px;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+
+                    filter: invert(1);
+                }
             }
         }
-
-        .utils_block_text {
-            color: white;
-            display: inline-block;
-            vertical-align: middle;
-            line-height: normal;
-        }
-    }
-
-    .utils_block:hover {
-        filter: brightness(2);
-        transition: ease-in-out 0.2s;
-        transform: scale(1.03);
     }
 }
+.navigation_tree {
+    background-color: var(--warning-color);
+    width: 100%;
+
+    padding-top: 10px;
+
+    ul {
+        list-style: none !important;
+        margin: 0;
+        padding: 0;
+    }
+}
+
+/* ── LEVEL 1: vertical line connecting serre siblings ── */
+.navigation_tree_content > ul {
+    position: relative;
+    margin-left: 1.5em;
+}
+
+.navigation_tree_content > ul > li {
+    position: relative;
+    padding-left: 12px;
+}
+
+/* trunk drawn per li, covers full height including children */
+.navigation_tree_content > ul > li::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #aaa;
+    z-index: 0;
+}
+
+/* last serre: trunk stops at row midpoint */
+.navigation_tree_content > ul > li:last-child::after {
+    bottom: calc(100% - 11px);
+}
+
+/* horizontal branch to each serre */
+.navigation_tree_content > ul > li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 11px;
+    width: 10px;
+    height: 2px;
+    background: #aaa;
+    z-index: 1;
+}
+
+/* rounded elbow on last serre */
+.navigation_tree_content > ul > li:last-child::before {
+    background: none;
+    height: 11px;
+    top: 0;
+    border-left:   2px solid #aaa;
+    border-bottom: 2px solid #aaa;
+}
+
+/* ── LEVEL 2: vertical line connecting bac children ── */
+.navigation_tree_content > ul > li > ul {
+    position: relative;
+    margin-left: 2.5em;
+}
+
+.navigation_tree_content > ul > li > ul > li {
+    position: relative;
+    padding-left: 12px;
+}
+
+/* trunk drawn per li, covers full height */
+.navigation_tree_content > ul > li > ul > li::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #aaa;
+    z-index: 0;
+}
+
+/* last bac: trunk stops at row midpoint */
+.navigation_tree_content > ul > li > ul > li:last-child::after {
+    bottom: calc(100% - 11px);
+}
+
+/* horizontal branch to each bac */
+.navigation_tree_content > ul > li > ul > li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 11px;
+    width: 10px;
+    height: 2px;
+    background: #aaa;
+    z-index: 1;
+}
+
+/* rounded elbow on last bac */
+.navigation_tree_content > ul > li > ul > li:last-child::before {
+    background: none;
+    height: 11px;
+    top: 0;
+    border-left:   2px solid #aaa;
+    border-bottom: 2px solid #aaa;
+}
+
+.navigation_tree ul ul {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.5s ease-in-out;
+}
+
+.navigation_tree ul ul.open {
+    max-height: 500px; /* large enough to fit any expanded content */
+}
+
+/* ── row layout ── */
+.line {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    padding-bottom: 6px;
+    gap: 6px;
+
+    cursor: pointer;
+    
+    img { width: 1.5em; display: block; }
+
+    a           { text-decoration: none !important;      color: black !important; }
+    a:hover     { text-decoration: underline !important; color: black !important; }
+    a:visited   { text-decoration: none !important;      color: black !important; }
+}
+
+
+
 
 .content {
     grid-area: 2 / 2 / 3 / 3;
@@ -254,6 +341,169 @@ body {
 .btn-outline-danger {
     border: 1px solid var(--danger-color);
 }
+
+/*style des formulaires*/
+
+.form {
+
+    .form-content {
+      position: relative;
+
+      animation-name: animatetop;
+      animation-duration: 0.4s;
+
+      display: flex;
+      flex-direction: column;
+      align-content: center;
+      justify-items: center;
+
+      height: fit-content;
+
+      width: 50%;
+      margin-top: 35px;
+      margin-left: 25%;
+      margin-right: 25%;
+
+      border-radius: 33px;
+      box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+
+
+        .form-header {
+          padding: var(--form-padding);
+        
+          border-radius: 30px 30px 0 0;
+
+          text-align: center;
+        }
+
+        /* form Body */
+        .form-body {
+            padding: var(--form-padding);
+
+            background-color: white;
+
+            .input:not(:last-child) {
+                display: flex;
+                flex-direction: column;
+
+                padding: 12px;
+
+                margin-bottom: 15px;
+
+                border-radius: 12px;
+
+                input {
+                    border-radius: 8px;
+                    border-color: white;
+                }
+                input:required {filter: brightness(1);}
+                input:invalid {border-color: var(--invalid-color);}
+                input:valid {border-color: var(--valid-color);}
+            }
+        }
+
+        /* form Footer */
+        .form-footer {
+          padding: var(--form-padding);
+        
+          border-radius: 0 0 30px 30px;
+
+          text-align: center;
+
+          .cancel {background-color: var(--invalid-color); padding: 6px; border-radius: 3px;}
+          .submit {background-color: var(--valid-color); padding: 6px; border-radius: 3px;}
+        }
+    }
+}
+
+.new {
+
+    .form-content {
+
+      background-color: var(--new-color);
+      color: black;
+
+      animation-name: animatetop;
+
+      border: 3px solid black;
+
+
+        .form-header {
+          background-color: var(--new-darker-color);
+          color: white;
+        }
+
+        /* form Body */
+        .form-body {
+
+            .input {
+                background-color: var(--new-lighter-color);
+            }
+        }
+
+        /* form Footer */
+        .form-footer {
+          background-color: var(--new-darker-color);
+          color: white;
+        }
+    }
+}
+
+.edit {
+
+    .form-content {
+
+      background-color: var(--edit-color);
+      color: black;
+
+      animation-name: animatetop;
+
+      border: 3px solid black;
+
+
+        .form-header {
+          background-color: var(--edit-darker-color);
+          color: white;
+        }
+
+        /* form Body */
+        .form-body {
+
+            .input {
+                background-color: var(--edit-lighter-color);
+            }
+        }
+
+        /* form Footer */
+        .form-footer {
+          background-color: var(--edit-darker-color);
+          color: white;
+        }
+    }
+}
+
+/* Add Animation */
+@keyframes animatetop {
+  from {top: -300px; opacity: 0}
+  to {top: 0; opacity: 1}
+}
+
+.humidite-ambiante {
+    display: flex;
+    flex-direction: row;
+}
+
+.humidite-sol {
+    display: flex;
+    flex-direction: row;
+}
+
+.temperature-ambiante {
+    display: flex;
+    flex-direction: row;
+}
+
+
 
 
 /*style des pages de connexion*/

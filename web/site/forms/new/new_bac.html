@@ -1,0 +1,65 @@
+<div class="form new" id="formModal">
+  <div class="form-content">
+    <form action="new_bac.php" method="post">
+      <div class="form-header">
+        <h2>Nouveau bac</h2>
+      </div>
+
+      <div class="form-body">
+        <div class="input">
+          <label for="nom">Nom</label>
+          <input
+            type="text"
+            minlength="5"
+            maxlength="25"
+            placeholder="Serre de Riri"
+            required
+            name="nom"
+            id="nom"
+          />
+        </div>
+
+        <div class="input">
+          <label for="taille">Taille du bac</label>
+          <span><i>En blocs par blocs</i></span>
+          <div class="line">
+            <label for="blocX">Nombre de bloc horizontal</label>
+            <input
+              type="number"
+              step="1"
+              min="1"
+              placeholder="Nombre de bac(s)"
+              required
+              name="blocX"
+              id="blocX"
+            />
+            <label for="blocY">Nombre de bloc vertical</label>
+            <input
+              type="number"
+              step="1"
+              min="1"
+              placeholder="Nombre de bac(s)"
+              required
+              name="blocY"
+              id="blocY"
+            />
+          </div>
+        </div>
+
+        <div class="input">
+          <label for="numero">Numéro du bac</label>
+          <span class="error"><i>par exemple</i><i style="color: var(--warning-color);">Ce numéro de bac est déjà pris</i></span>
+          <input type="number" name="numero" id="numero">
+        </div>
+
+        <div class="input">
+          <input type="submit" hidden />
+        </div>
+      </div>
+      <div class="form-footer">
+        <input class="cancel" type="button" value="annuler" id="formCancel" />
+        <input class="submit" type="submit" value="valider" id="formSubmit" />
+      </div>
+    </form>
+  </div>
+</div>

@@ -23,132 +23,158 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
 
     <title>SIGACS - Tableau de bord</title>
 
-    <link rel="stylesheet" href="assets/static/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="assets/static/css/style.css" />
+	<script src="assets/static/css/script.js"></script>	
+	<script src="forms/forms.js"></script>
 </head>
 
 <body>
     <div class="main">
         <div class="navbar">
             <h1>Tableau de bord du projet SIGACS</h1>
-			Bienvenue <?php echo $_SESSION['username']; ?>
-
-			<div class="account-management">
-				<a href="/connexions/password_reset.php" class="btn btn-block btn-outline-warning"><img src="assets/static/icons/rotate-ccw-key.svg" alt=""></a>
-				<a href="/connexions/logout.php" class="btn btn-block btn-outline-danger"><img src="assets/static/icons/log-out.svg" alt=""></a>
-			</div>
 
         </div>
 
         <div class="sidebar">
-            sidebar responsive
-
-			<div class="utils_menu">
-				<div class="utils_menu_icon">
-					<img src="assets/static/icons/home.svg" alt="">
+			<div class="sidebar_header">
+				<img src="assets/static/logo.png" alt="logo SIGACS">
+			
+				<div class="greetings">
+					Bienvenue <?php echo $_SESSION['username']; ?>
 				</div>
-
-				<div class="utils_menu_icon">
-					<img src="assets/static/icons/settings.svg" alt="">
-				</div>
-
-				<div class="utils_menu_icon">
-					<img src="assets/static/icons/refresh.svg" alt="">
-				</div>
-
-				<div class="utils_menu_icon">
-					<img src="assets/static/icons/info-circle.svg" alt="">
-				</div>
-			</div>
 			
 
-			<div class="utils_block_title">
-				<span>Administration</span>
-				<div class="utils_block_icon">
-					<img src="assets/static/icons/panel-top-open.svg" alt="">
+				<div class="utils_menu">
+	
+					<a href="">
+						<div class="utils_menu_btn">
+							<img src="assets/static/icons/home.svg" alt="">
+						</div>
+					</a>
+	
+					<a href="/connexions/password_reset.php">
+						<div class="utils_menu_btn">
+							<img src="assets/static/icons/rotate-ccw-key.svg" alt="reset passwd">
+						</div>
+					</a>
+	
+					<a href="logout.php">
+						<div class="utils_menu_btn">
+							<img src="assets/static/icons/log-out.svg" alt="">
+						</div>
+					</a>
+	
+					<a href="">
+						<div class="utils_menu_btn">
+							<img src="assets/static/icons/settings.svg" alt="">
+						</div>
+					</a>
+	
+					<a href="">
+						<div class="utils_menu_btn">
+							<img src="assets/static/icons/refresh.svg" alt="">
+						</div>
+					</a>
+	
+					<a href="">
+						<div class="utils_menu_btn">
+							<img src="assets/static/icons/info-circle.svg" alt="">
+						</div>
+					</a>
+	
 				</div>
 			</div>
 
-			<div class="utils_block">
-				<div class="utils_block_icon">
-					<img src="assets/static/icons/brand-mysql.svg" alt="">
-				</div>
-				<div class="utils_block_text">
-					<span>PHPMyAdmin</span>
+			<div class="navigation_tree">
+				<!--contenu admin eventuel-->
+				<div class="navigation_tree_content">
+					<ul>
+						<li>
+							<div class="line" id="newSerreBtn">
+								<img src="assets/static/icons/navigation_tree/house-plus.svg" alt="">
+								<a>Ajouter une nouvelle serre</a>
+							</div>
+						</li>
+
+						<li>
+							<div class="line">
+								<img src="assets/static/icons/navigation_tree/square-plus.svg" alt="">
+								<img src="assets/static/icons/navigation_tree/greenhouse.png" alt="">
+								<a>Serre N°xx</a>
+							</div>
+							<ul>
+								<li>
+									<div class="line" id="newBacBtn">
+										<img src="assets/static/icons/navigation_tree/grid-2x2-plus.svg" alt="">
+										<a>Ajouter un nouveau bac</a>
+									</div>
+								</li>
+								<li>
+									<div class="line">
+										<img src="assets/static/icons/navigation_tree/planter-box.png" alt="">
+										<a>Bac N°xx</a>
+									</div>
+								</li>
+								<li>
+									<div class="line">
+										<img src="assets/static/icons/navigation_tree/planter-box.png" alt="">
+										<a>Bac N°xx</a>
+									</div>
+								</li>
+								<li>
+									<div class="line">
+										<img src="assets/static/icons/navigation_tree/planter-box.png" alt="">
+										<a>Bac N°xx</a>
+									</div>
+								</li>
+								<li>
+									<div class="line">
+										<img src="assets/static/icons/navigation_tree/planter-box.png" alt="">
+										<a>Bac N°xx</a>
+									</div>
+								</li>
+							</ul>
+						</li>
+
+						<li>
+							<div class="line" id="newCultureBtn">
+								<img src="assets/static/icons/navigation_tree/plant-plus.svg" alt="">
+								<a>Ajouter une nouvelle culture</a>
+							</div>
+						</li>
+
+						<li>
+							<div class="line">
+								<img src="assets/static/icons/navigation_tree/square-plus.svg" alt="">
+								<img src="/assets/static/icons/navigation_tree/potted-plant-icon.png" alt="">
+								<a>Liste des cultures disponibles</a>
+							</div>
+							<ul>
+								<li>
+									<div class="line">
+										<img src="assets/static/icons/navigation_tree/potted-plant-icon.png" alt="">
+										<a>Nom de la culture 1</a>
+									</div>
+								</li>
+								<li>
+									<div class="line">
+										<img src="assets/static/icons/navigation_tree/potted-plant-icon.png" alt="">
+										<a>Nom de la culture 2</a>
+									</div>
+								</li>
+								<li>
+									<div class="line">
+										<img src="assets/static/icons/navigation_tree/potted-plant-icon.png" alt="">
+										<a>Nom de la culture 3</a>
+									</div>
+								</li>
+
+							</ul>
+						</li>
+						
+					</ul>
 				</div>
 			</div>
-
-			<div class="utils_block">
-				<div class="utils_block_icon">
-					<img src="assets/static/icons/zoom-code.svg" alt="">
-				</div>
-				<div class="utils_block_text">
-					<span>Centreon</span>
-				</div>
-			</div>
-
-			<div class="utils_block">
-				<div class="utils_block_icon">
-					<img src="assets/static/icons/network.svg" alt="">
-				</div>
-				<div class="utils_block_text">
-					<span>PfSense</span>
-				</div>
-			</div>
-
-
-
-			<div class="utils_block_title">
-				<span>Parc</span>
-				<div class="utils_block_icon">
-					<img src="assets/static/icons/panel-top-open.svg" alt="">
-				</div>
-			</div>
-
-			<div class="utils_block">
-				<div class="utils_block_icon">
-					<img src="assets/static/icons/house-plus.svg" alt="">
-				</div>
-				<div class="utils_block_text">
-					<span>Ajouter une serre</span>
-				</div>
-			</div>
-
-			<div class="utils_block">
-				<div class="utils_block_icon">
-					<img src="assets/static/icons/house-plus.svg" alt="">
-				</div>
-				<div class="utils_block_text">
-					<span>Voir les serres</span>
-				</div>
-			</div>
-
-
-
-			<div class="utils_block_title">
-				<span>Serre</span>
-				<div class="utils_block_icon">
-					<img src="assets/static/icons/panel-top-open.svg" alt="">
-				</div>
-			</div>
-
-			<div class="utils_block">
-				<div class="utils_block_icon">
-					<img src="assets/static/icons/grid-2x2-plus.svg" alt="">
-				</div>
-				<div class="utils_block_text">
-					<span>Ajouter un bac</span>
-				</div>
-			</div>
-
-			<div class="utils_block">
-				<div class="utils_block_icon">
-					<img src="assets/static/icons/plant.svg" alt="">
-				</div>
-				<div class="utils_block_text">
-					<span>Ajouter une culture</span>
-				</div>
-			</div>
-
 
         </div>
 
@@ -162,6 +188,9 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
             <span><i>BTS CIEL – Saint Joseph LaSalle – Lorient</i></span>
         </div>
     </div>
+
+	<div id="modalContainer" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000;"></div>
+
 </body>
 
 </html>
