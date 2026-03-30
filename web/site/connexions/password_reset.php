@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $pdo->beginTransaction();
 
             // Prepare an update statement using PDO
-            $sql = 'UPDATE users SET password = ? WHERE id = ?';
+            $sql = 'UPDATE users SET password = ? WHERE id_utilisateur = ?';
             $stmt = $pdo->prepare($sql);
 
             // Set parameters
@@ -78,11 +78,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
-    <title>Reset Password</title>
+    <title>Réinitialiser mot de passe</title>
     <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/cosmo/bootstrap.min.css" rel="stylesheet" integrity="sha384-qdQEsAI45WFCO5QwXBelBe1rR9Nwiss4rGEqiszC+9olH1ScrLrMQr1KmDR964uZ" crossorigin="anonymous">
     <link rel="stylesheet" href="../assets/static/css/style.css">
     
@@ -91,23 +91,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <main class="container wrapper">
         <section>
-            <h2>Reset Password</h2>
-            <p>Please fill out this form to reset your password.</p>
-            <p>Connecté en tant que <?php echo $_SESSION['username']; ?></p>
+            <h2>Réinitialiser mot de passe</h2>
+            <p>Remplissez ce formulaire pour réinitialiser votre mot de passe.</p>
+            <p>Connecté en tant que <b><?php echo $_SESSION['nom']; echo " "; echo $_SESSION['prenom']; ?></b></p>
+            <p>Avec l'identifiant <b><?php echo $_SESSION['username']; ?></b></p>
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                 <div class="form-group <?php echo (!empty($new_password_err)) ? 'has-error' : ''; ?>">
-                    <label>New Password</label>
+                    <label>Nouveau mot de passe</label>
                     <input type="password" name="new_password" class="form-control" value="<?php echo $new_password; ?>">
                     <span class="help-block"><?php echo $new_password_err; ?></span>
                 </div>
                 <div class="form-group <?php echo (!empty($confirm_password_err)) ? 'has-error' : ''; ?>">
-                    <label>Confirm Password</label>
+                    <label>Confirmez votre nouveau mot de passe</label>
                     <input type="password" name="confirm_password" class="form-control">
                     <span class="help-block"><?php echo $confirm_password_err; ?></span>
                 </div>
                 <div class="form-group">
                     <input type="submit" class="btn btn-block btn-primary" value="Submit">
-                    <a class="btn btn-block btn-link bg-light" href="../index.php">Cancel</a>
+                    <a class="btn btn-block btn-link bg-light" href="../index.php">Annuler</a>
                 </div>
             </form>
         </section>

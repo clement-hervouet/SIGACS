@@ -4,7 +4,7 @@ server with user.sql setting (user 'your-user' with 'your-passwd' password) */
 define('DB_SERVER', 'caddy-db');
 define('DB_USERNAME', 'login.sigacs');
 define('DB_PASSWORD', 'stjolorient');
-define('DB_NAME', 'user_base');
+define('DB_NAME', 'parc');
 
 /* Attempt to connect to MySQL database using PDO */
 try {

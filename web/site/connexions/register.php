@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 				$pdo->beginTransaction();
 
 				// Lock the row if exists to prevent race conditions
-				$sql = 'SELECT id FROM users WHERE username = ? FOR UPDATE';
+				$sql = 'SELECT id_utilisateur FROM users WHERE username = ? FOR UPDATE';
 				$stmt = $pdo->prepare($sql);
 				$stmt->execute([$param_username]);
 
@@ -144,12 +144,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 	<main>
 		<section class="container wrapper">
-			<h2 class="display-4 pt-3">Sign Up</h2>
-			<p class="text-center">Please fill this form to create an account.</p>
+			<h2 class="display-4 pt-3">S'inscrire</h2>
+			<p class="text-center">Remplissez ce formulaire pour vous inscrire.</p>
 			<form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
 				<div class="form-group <?php (!empty($username_err)) ? 'has_error' : ''; ?>">
-					<label for="username">Username</label>
+					<label for="username">Nom d'utilisateur</label>
 					<input type="text" name="username" id="username" class="form-control" value="<?php echo $username ?>">
+					<span class="help-block">Cet identifiant ne peut être changé</span>
 					<span class="help-block"><?php echo $username_err; ?></span>
 				</div>
 
@@ -166,22 +167,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 				</div>
 
 				<div class="form-group <?php (!empty($password_err)) ? 'has_error' : ''; ?>">
-					<label for="password">Password</label>
+					<label for="password">Mot de passe</label>
 					<input type="password" name="password" id="password" class="form-control" value="<?php echo $password ?>">
 					<span class="help-block"><?php echo $password_err; ?></span>
 				</div>
 
 				<div class="form-group <?php (!empty($confirm_password_err)) ? 'has_error' : ''; ?>">
-					<label for="confirm_password">Confirm Password</label>
+					<label for="confirm_password">Confirmer mot de passe</label>
 					<input type="password" name="confirm_password" id="confirm_password" class="form-control" value="<?php echo $confirm_password; ?>">
 					<span class="help-block"><?php echo $confirm_password_err; ?></span>
 				</div>
 
 				<div class="form-group">
-					<input type="submit" class="btn btn-block btn-outline-success" value="Submit">
-					<input type="reset" class="btn btn-block btn-outline-primary" value="Reset">
+					<input type="submit" class="btn btn-block btn-outline-success" value="S'inscrire">
 				</div>
-				<p>Already have an account? <a href="../login.php">Login here</a>.</p>
+				<p>Vous avez déjà un compte? <a href="../login.php">Se connecter</a>.</p>
 			</form>
 		</section>
 	</main>
