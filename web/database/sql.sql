@@ -6,11 +6,11 @@ CREATE DATABASE IF NOT EXISTS user_base
 USE user_base;
 
 CREATE TABLE users (
-    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    username VARCHAR(50) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    role     ENUM('admin','lecteur','editeur') DEFAULT 'lecteur'
-    nom VARCHAR(50) NOT NULL,
-    prenom VARCHAR(50) NOT NULL
+    id          INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    identifiant VARCHAR(50) NOT NULL UNIQUE,
+    password    VARCHAR(255) NOT NULL,
+    created_at  DATETIME DEFAULT CURRENT_TIMESTAMP,
+    role        ENUM('admin','lecteur','editeur') DEFAULT 'lecteur',
+    nom         VARCHAR(50) NOT NULL,
+    prenom      VARCHAR(50) NOT NULL
 );
