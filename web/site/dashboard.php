@@ -40,7 +40,7 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
 				<img src="assets/static/logo.png" alt="logo SIGACS">
 			
 				<div class="greetings">
-					Bienvenue <?php echo $_SESSION['username']; ?>
+					Bienvenue <?php echo $_SESSION['prenom']; ?>
 				</div>
 			
 
