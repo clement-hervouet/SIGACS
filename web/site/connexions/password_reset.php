@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $pdo->beginTransaction();
 
             // Prepare an update statement using PDO
-            $sql = 'UPDATE users SET password = ? WHERE id = ?';
+            $sql = 'UPDATE users SET password = ? WHERE id_utilisateur = ?';
             $stmt = $pdo->prepare($sql);
 
             // Set parameters

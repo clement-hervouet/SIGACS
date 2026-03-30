@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 				$pdo->beginTransaction();
 
 				// Lock the row if exists to prevent race conditions
-				$sql = 'SELECT id FROM users WHERE username = ? FOR UPDATE';
+				$sql = 'SELECT id_utilisateur FROM users WHERE username = ? FOR UPDATE';
 				$stmt = $pdo->prepare($sql);
 				$stmt->execute([$param_username]);
 

@@ -6,7 +6,7 @@ USE parc;
 
 CREATE TABLE users (
     id_utilisateur  INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    identifiant     VARCHAR(50) NOT NULL UNIQUE,
+    username        VARCHAR(50) NOT NULL UNIQUE,
     password        VARCHAR(255) NOT NULL,
     created_at      DATETIME DEFAULT CURRENT_TIMESTAMP,
     role            ENUM('admin','lecteur','editeur') DEFAULT 'lecteur',
@@ -31,7 +31,7 @@ CREATE TABLE serre (
     surface         FLOAT,
     nbBac           INTEGER,
     numero          INTEGER,
-    cree_par        VARCHAR(50) REFERENCES users(identifiant)
+    cree_par        VARCHAR(50) REFERENCES users(username)
 );
 
 -- Table: bac
@@ -59,7 +59,7 @@ CREATE TABLE culture (
     tempMax         FLOAT,
     tempOpt         FLOAT,
     tempsPousse     INTEGER,
-    cree_par        VARCHAR(50) REFERENCES users(identifiant)
+    cree_par        VARCHAR(50) REFERENCES users(username)
 );
 
 -- Table: capteur

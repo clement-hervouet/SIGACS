@@ -40,12 +40,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   // Validate credentials
   if (empty($username_err) && empty($password_err)) {
     // Prepare a select statement using PDO
-    $sql = 'SELECT id, username, password FROM users WHERE username = ?';
+    $sql = 'SELECT id_utilisateur, username, password FROM users WHERE username = ?';
     $stmt = $pdo->prepare($sql);
     if ($stmt->execute([$username])) {
       $row = $stmt->fetch();
       if ($row) {
-        $id = $row['id'];
+        $id = $row['id_utilisateur'];
         $username = $row['username'];
         $hashed_password = $row['password'];
 
