@@ -25,7 +25,7 @@ CREATE TABLE controleur (
 -- Table: serre
 CREATE TABLE serre (
     id_serre        INTEGER PRIMARY KEY,
-    controleur      INTEGER REFERENCES controleur(id),
+    controleur      INTEGER REFERENCES controleur(id_controleur),
     nom             TEXT,
     localisation    TEXT,
     surface         FLOAT,
@@ -37,7 +37,7 @@ CREATE TABLE serre (
 -- Table: bac
 CREATE TABLE bac (
     id_bac          INTEGER PRIMARY KEY,
-    serre           INTEGER REFERENCES serre(id),
+    serre           INTEGER REFERENCES serre(id_serre),
     x_taille        INTEGER,
     y_taille        INTEGER,
     numero          INTEGER,
@@ -74,21 +74,21 @@ CREATE TABLE capteur (
 -- Table: bloc
 CREATE TABLE bloc (
     id_bloc         INTEGER PRIMARY KEY,
-    bac             INTEGER REFERENCES bac(id),
+    bac             INTEGER REFERENCES bac(id_bac),
     x               INTEGER,
     y               INTEGER,
     empty           BOOLEAN,
-    culture         INTEGER REFERENCES culture(id),
+    culture         INTEGER REFERENCES culture(id_culture),
     plante_a        DATETIME
 );
 
 -- Table: mesure
 CREATE TABLE mesure (
     id_mesure       INTEGER PRIMARY KEY,
-    bac             INTEGER REFERENCES bac(id),
+    bac             INTEGER REFERENCES bac(id_bac),
     value           FLOAT,
     mesure_a        DATETIME,
-    capteur         INTEGER REFERENCES capteur(id)
+    capteur         INTEGER REFERENCES capteur(id_capteur)
 );
 
 -- Table: error
