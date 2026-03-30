@@ -77,7 +77,7 @@ CREATE TABLE bloc (
     bac             INTEGER REFERENCES bac(id_bac),
     x               INTEGER,
     y               INTEGER,
-    empty           BOOLEAN,
+    vide            BOOLEAN,
     culture         INTEGER REFERENCES culture(id_culture),
     plante_a        DATETIME
 );
