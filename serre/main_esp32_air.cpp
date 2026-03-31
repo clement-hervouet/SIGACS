@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <esp_now.h>
+#include <esp_wifi.h>
 #include <M5StickC.h>
 #include <Adafruit_Sensor.h>
 #include <DHT.h>
@@ -9,7 +10,7 @@
 #define DHTPIN  33
 #define DHTTYPE DHT22
 
-uint8_t gatewayMAC[] = {0x24, 0xD7, 0xEB, 0x38, 0xDC, 0x38};
+uint8_t gatewayMAC[] = {0x24, 0xD7, 0xEB, 0x38, 0xEE, 0xB4};
 
 typedef struct {
   char type[4];
@@ -33,11 +34,14 @@ void setupESPNow() {
     Serial.println("Erreur init ESP-NOW");
     return;
   }
+
+  esp_wifi_set_channel(1, WIFI_SECOND_CHAN_NONE); 
+
   esp_now_register_send_cb(onDataSent);
 
   esp_now_peer_info_t peerInfo = {};
   memcpy(peerInfo.peer_addr, gatewayMAC, 6);
-  peerInfo.channel = 0;
+  peerInfo.channel = 1;
   peerInfo.encrypt = false;
 
   if (esp_now_add_peer(&peerInfo) != ESP_OK) {
