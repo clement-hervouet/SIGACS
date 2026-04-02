@@ -127,12 +127,29 @@ docker run --rm --network parc-net eclipse-mosquitto:2 \
 
 ```
 .
-├── bridge.py                     # Main Python program
-├── Dockerfile                    # Bridge image
-├── docker-compose.yml            # Full stack definition
-├── requirements.txt              # Python dependencies
-├── .env.example                  # Environment template
-└── mosquitto/
-    └── config/
-        └── mosquitto.conf        # Broker configuration
+└── mqtt-bridge
+    ├── bridge.py
+    ├── docker-compose.yml
+    ├── Dockerfile
+    ├── mosquitto
+    │   ├── client-certs
+    │   │   ├── client.crt
+    │   │   ├── client.csr
+    │   │   └── client.key
+    │   ├── clients-certs.sh
+    │   ├── config
+    │   │   ├── mosquitto.conf
+    │   │   └── mosquitto.conf.bak
+    │   ├── server-certs
+    │   │   ├── ca.crt
+    │   │   ├── ca.key
+    │   │   ├── ca.srl
+    │   │   ├── server.crt
+    │   │   ├── server.csr
+    │   │   └── server.key
+    │   ├── server-certs.sh
+    │   └── v3.ext
+    ├── README.md
+    └── requirements.txt
+
 ```
