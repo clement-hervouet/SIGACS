@@ -1,0 +1,100 @@
+version: "3.9"
+
+# =============================================================================
+#  Parc – MQTT Bridge stack
+# =============================================================================
+#
+#  Services:
+#    mosquitto  – MQTT broker
+#    bridge     – Python MQTT→MySQL bridge (this repo)
+#
+#  The MySQL/MariaDB server is expected to be external (already running).
+#  All database credentials and the broker address are passed via environment
+#  variables so no secret is baked into any image.
+#
+#  Usage:
+#    1. Copy .env.example to .env and fill in the values.
+#    2. docker compose up -d
+# =============================================================================
+
+services:
+
+  # ---------------------------------------------------------------------------
+  # Mosquitto MQTT broker
+  # ---------------------------------------------------------------------------
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: mosquitto
+    restart: unless-stopped
+    volumes:
+      - ./mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - ./mosquitto/server-certs:/mosquitto/certs:ro
+      - mosquitto-data:/mosquitto/data
+      - mosquitto-log:/mosquitto/log
+    ports:
+      - "${MQTT_EXPOSE_PORT:-8883}:8883"   # expose only if needed externally
+    networks:
+      - parc-net
+    healthcheck:
+      test: ["CMD-SHELL", "mosquitto_sub -t '$$SYS/broker/uptime' -C 1 -W 2 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ---------------------------------------------------------------------------
+  # MQTT → MySQL bridge
+  # ---------------------------------------------------------------------------
+  bridge:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: parc-mqtt-bridge:latest
+    container_name: parc-bridge
+    restart: unless-stopped
+    volumes:
+    - ./mosquitto/server-certs/ca.crt:/certs/ca.crt:ro
+    - ./mosquitto/client-certs/client.crt:/certs/client.crt:ro
+    - ./mosquitto/client-certs/client.key:/certs/client.key:ro
+    depends_on:
+      mosquitto:
+        condition: service_healthy
+    environment:
+      # --- MQTT ---
+      MQTT_HOST:         mosquitto          # service name inside Docker network
+      MQTT_PORT:         "8883"
+      MQTT_KEEPALIVE:    "60"
+      MQTT_USER:         ${MQTT_USER:-}
+      MQTT_PASSWORD:     ${MQTT_PASSWORD:-}
+      MQTT_RETRY_DELAY:  "5"
+
+      # --- Database ---
+      DB_HOST:           ${DB_HOST}
+      DB_PORT:           ${DB_PORT:-3306}
+      DB_NAME:           ${DB_NAME:-parc}
+      DB_USER:           ${DB_USER}
+      DB_PASSWORD:       ${DB_PASSWORD}
+      DB_RETRY_DELAY:    "5"
+
+      # --- Logging ---
+      LOG_LEVEL:         ${LOG_LEVEL:-INFO}
+    networks:
+      - parc-net
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+# ---------------------------------------------------------------------------
+# Shared network
+# ---------------------------------------------------------------------------
+networks:
+  parc-net:
+    name: parc-net
+
+# ---------------------------------------------------------------------------
+# Volumes
+# ---------------------------------------------------------------------------
+volumes:
+  mosquitto-data:
+  mosquitto-log:
