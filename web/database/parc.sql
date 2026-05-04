@@ -16,15 +16,16 @@ CREATE TABLE users (
 
 -- Table: controleur
 CREATE TABLE controleur (
-    id_controleur   INTEGER PRIMARY KEY,
+    id_controleur   INTEGER PRIMARY KEY UNIQUE,
     type            TEXT,
+    nom             VARCHAR(50) NOT NULL DEFAULT 'controleur',
     ip              TEXT,
     status          BOOLEAN
 );
 
 -- Table: serre
 CREATE TABLE serre (
-    id_serre        INTEGER PRIMARY KEY,
+    id_serre        INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
     controleur      INTEGER REFERENCES controleur(id_controleur),
     nom             TEXT,
     localisation    TEXT,
@@ -36,17 +37,18 @@ CREATE TABLE serre (
 
 -- Table: bac
 CREATE TABLE bac (
-    id_bac          INTEGER PRIMARY KEY,
+    id_bac          INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
     serre           INTEGER REFERENCES serre(id_serre),
     x_taille        INTEGER,
     y_taille        INTEGER,
     numero          INTEGER,
+    nom             VARCHAR(50) NULL AFTER,
     arrose          BOOLEAN
 );
 
 -- Table: culture
 CREATE TABLE culture (
-    id_culture      INTEGER PRIMARY KEY,
+    id_culture      INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
     plante          TEXT,
     plante_latin    TEXT,
     humMinAmb       FLOAT,
