@@ -32,7 +32,7 @@ CREATE TABLE serre (
     surface         FLOAT,
     nbBac           INTEGER,
     numero          INTEGER,
-    cree_par        VARCHAR(50) REFERENCES users(username)
+    cree_par        INT REFERENCES users(id_utilisateur)
 );
 
 -- Table: bac
@@ -61,7 +61,7 @@ CREATE TABLE culture (
     tempMax         FLOAT,
     tempOpt         FLOAT,
     tempsPousse     INTEGER,
-    cree_par        VARCHAR(50) REFERENCES users(username)
+    cree_par        INT REFERENCES users(id_utilisateur)
 );
 
 -- Table: capteur
