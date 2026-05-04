@@ -1,6 +1,7 @@
 <?php
 // Include config file
 require_once '../config/config.php';
+$pdo = get_pdo("login");
 
 
 // Define variables and initialize with empty values

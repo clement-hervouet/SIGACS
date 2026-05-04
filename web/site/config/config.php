@@ -1,26 +1,26 @@
 <?php
-/* Database credentials. Assuming you are running MySQL
-server with user.sql setting (user 'your-user' with 'your-passwd' password) */
 define('DB_SERVER', 'caddy-db');
-define('DB_USERNAME', 'login.sigacs');
-define('DB_PASSWORD', 'stjolorient');
 define('DB_NAME', 'parc');
 
-/* Attempt to connect to MySQL database using PDO */
-try {
-    $dsn = 'mysql:host=' . DB_SERVER . ';dbname=' . DB_NAME . ';charset=utf8mb4';
-    $pdo = new PDO(
-        $dsn,
-        DB_USERNAME,
-        DB_PASSWORD,
-        [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+function get_pdo(string $account): PDO {
+    if ($account === 'login') {
+        $username = 'login.sigacs';
+        $password = 'stjolorient';
+    } else {
+        $username = 'app.sigacs';
+        $password = 'stjolorient';
+    }
+
+    try {
+        $dsn = 'mysql:host=' . DB_SERVER . ';dbname=' . DB_NAME . ';charset=utf8mb4';
+        return new PDO($dsn, $username, $password, [
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_EMULATE_PREPARES => false,
-        ]
-    );
-} catch (PDOException $e) {
-    die('ERROR: Could not connect. ' . $e->getMessage());
+            PDO::ATTR_EMULATE_PREPARES   => false,
+        ]);
+    } catch (PDOException $e) {
+        die('ERROR: Could not connect. ' . $e->getMessage());
+    }
 }
 
 /*

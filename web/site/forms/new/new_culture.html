@@ -1,92 +1,78 @@
 <div class="form new" id="formModal">
   <div class="form-content">
-    <form action="new_culture.html" method="post">
+    <form action="/forms/new/new_culture.php" method="post">
       <div class="form-header">
         <h2>Nouvelle culture</h2>
       </div>
 
       <div class="form-body">
+            
         <div class="input">
           <label for="nom">Nom</label>
-          <input
-            type="text"
-            minlength="5"
-            maxlength="25"
-            placeholder="Serre de Riri"
-            required
-            name="nom"
-            id="nom"
-          />
+          <input type="text" minlength="2" maxlength="50"
+                 placeholder="Tomate" required name="nom" id="nom" />
         </div>
-
+      
         <div class="input">
-          <label for="nom">Nom en Latin</label>
-          <input
-            type="text"
-            minlength="5"
-            maxlength="25"
-            placeholder="Serre de Riri"
-            required
-            name="nom"
-            id="nom"
-          />
+          <label for="nom_latin">Nom en Latin</label>
+          <input type="text" minlength="2" maxlength="50"
+                 placeholder="Solanum lycopersicum" name="nom_latin" id="nom_latin" />
         </div>
-
+      
         <div class="input">
           <div class="humidite-ambiante">
             <div class="minimum">
-              <label for="humidite-ambiante">Humidité ambiante minimum</label>
-              <input type="number" name="humidite-ambiante" id="humdite-ambiante">
+              <label for="humMinAmb">Humidité ambiante minimum</label>
+              <input type="number" step="0.1" name="humMinAmb" id="humMinAmb" />
             </div>
             <div class="maximum">
-              <label for="humidite-ambiante">Humidité ambiante maximum</label>
-              <input type="number" name="humidite-ambiante" id="humdite-ambiante">
+              <label for="humMaxAmb">Humidité ambiante maximum</label>
+              <input type="number" step="0.1" name="humMaxAmb" id="humMaxAmb" />
             </div>
             <div class="optimal">
-              <label for="humidite-ambiante">Humidité ambiante optimal</label>
-              <input type="number" name="humidite-ambiante" id="humdite-ambiante">
+              <label for="humOptAmb">Humidité ambiante optimal</label>
+              <input type="number" step="0.1" name="humOptAmb" id="humOptAmb" />
             </div>
           </div>
-          
+        
           <div class="humidite-sol">
             <div class="minimum">
-              <label for="humidite-sol">Humidité du sol minimum</label>
-              <input type="number" name="humidite-sol" id="humidite-sol">
+              <label for="humMinSol">Humidité du sol minimum</label>
+              <input type="number" step="0.1" name="humMinSol" id="humMinSol" />
             </div>
             <div class="maximum">
-              <label for="humidite-sol">Humidité du sol maximum</label>
-              <input type="number" name="humidite-sol" id="humidite-sol">
+              <label for="humMaxSol">Humidité du sol maximum</label>
+              <input type="number" step="0.1" name="humMaxSol" id="humMaxSol" />
             </div>
             <div class="optimal">
-              <label for="humidite-sol">Humidité du sol optimal</label>
-              <input type="number" name="humidite-sol" id="humidite-sol">
+              <label for="humOptSol">Humidité du sol optimal</label>
+              <input type="number" step="0.1" name="humOptSol" id="humOptSol" />
             </div>
           </div>
-
+        
           <div class="temperature-ambiante">
             <div class="minimum">
-              <label for="temperature-ambiante">Température ambiante minimum</label>
-              <input type="number" name="temperature-ambiante" id="">
+              <label for="tempMin">Température ambiante minimum</label>
+              <input type="number" step="0.1" name="tempMin" id="tempMin" />
             </div>
             <div class="maximum">
-              <label for="temperature-ambiante">Température ambiante maximum</label>
-              <input type="number" name="temperature-ambiante" id="">
+              <label for="tempMax">Température ambiante maximum</label>
+              <input type="number" step="0.1" name="tempMax" id="tempMax" />
             </div>
             <div class="optimal">
-              <label for="temperature-ambiante">Température ambiante optimal</label>
-              <input type="number" name="temperature-ambiante" id="">
+              <label for="tempOpt">Température ambiante optimal</label>
+              <input type="number" step="0.1" name="tempOpt" id="tempOpt" />
             </div>
           </div>
-
         </div>
-        
+      
         <div class="input">
           <div class="temps">
             <label for="temps">Temps de pousse usuel en jours</label>
-            <input type="number" name="temps" id="temps">
+            <input type="number" step="1" min="1" name="temps" id="temps" />
           </div>
         </div>
-
+      
         <div class="input">
           <input type="submit" hidden />
         </div>
