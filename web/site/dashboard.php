@@ -1,11 +1,14 @@
 <?php
-// Initialize session
 session_start();
 
-if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
-	header('location: login.php');
-	exit;
+// Fix: was using wrong logical operator
+if (empty($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    header('location: login.php');
+    exit;
 }
+
+// DB connection needed by menu/content.php
+require_once 'config/config.php';
 ?>
 <!doctype html>
 <html lang="fr">
@@ -24,8 +27,8 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
     <title>SIGACS - Tableau de bord</title>
 
     <link rel="stylesheet" type="text/css" href="assets/static/css/style.css" />
-	<script src="assets/static/css/script.js"></script>	
-	<script src="forms/forms.js"></script>
+	
+	<script src="forms/forms.js" defer></script>
 </head>
 
 <body>
@@ -87,8 +90,11 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
 
 			<div class="navigation_tree">
 				<!--contenu admin eventuel-->
-				<div class="navigation_tree_content">
-					<ul>
+				<div class="navigation_tree_content" id="navigationTree">
+					<?php include __DIR__ . '/menu/content.php'; ?>
+					
+					<!-- Form de démo offline -->
+					<!-- <ul>
 						<li>
 							<div class="line" id="newSerreBtn">
 								<img src="assets/static/icons/navigation_tree/house-plus.svg" alt="">
@@ -172,14 +178,14 @@ if (!isset($_SESSION['loggedin']) && $_SESSION['loggedin'] !== false) {
 							</ul>
 						</li>
 						
-					</ul>
+					</ul> -->
 				</div>
 			</div>
 
         </div>
 
-        <div class="content">
-            content responsive
+        <div class="content" id="mainContent">
+            <p>Sélectionnez un élément dans le menu.</p>
         </div>
 
         <div class="footerbar">
