@@ -9,7 +9,7 @@
 
 #define DHTPIN 33
 #define DHTTYPE DHT22
-#define ESPNOW_CHANNEL 6
+#define ESPNOW_CHANNEL 1
 
 uint8_t gatewayMAC[] = {0x24, 0xD7, 0xEB, 0x38, 0xDC, 0x38};
 

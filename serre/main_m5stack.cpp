@@ -1,182 +1,202 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
+#include <esp_now.h>
+#include <esp_wifi.h>
 #include <PubSubClient.h>
-#include <M5Stack.h>
 #include "secrets.h"
 
 // ─── CONFIG ──────────────────────────────────────────────────────────────────
 #define SERRE_ID 1
-#define BAC_ID 1
-#define PUBLISH_INTERVAL_MS 20000  // Publication toutes les 20s
-#define MQTT_RETRY_INTERVAL 10000 // Tentative reconnexion toutes les 10s
+#define BAC_ID   1
 
 // ─── OBJETS GLOBAUX ──────────────────────────────────────────────────────────
 WiFiClientSecure espClient;
-PubSubClient mqttClient(espClient);
+PubSubClient     mqttClient(espClient);
+unsigned long    lastMqttRetry = 0;
+unsigned long    lastHeartbeat = 0; // Pour vérifier que la boucle tourne
 
-unsigned long lastPublish = 0;
-unsigned long lastMqttRetry = 0;
-uint32_t publishCount = 0;
+float lastHumiditeAmbiante    = -1;
+float lastTemperatureAmbiante = -1;
+float lastHumiditeSol         = -1;
 
-// ─── WIFI ────────────────────────────────────────────────────────────────────
-void connectWiFi()
-{
-  Serial.printf("\n[WiFi] Connexion a \"%s\"...\n", WIFI_SSID);
+volatile bool pendingPublish = false;
 
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+typedef struct __attribute__((packed)) {
+  char  type[4];       
+  float temperature;
+  float humidity;
+} SensorData;          
 
-  uint8_t attempts = 0;
-  while (WiFi.status() != WL_CONNECTED && attempts < 40)
-  {
-    delay(500);
-    Serial.print(".");
-    attempts++;
-  }
+// ─── FONCTIONS MQTT ──────────────────────────────────────────────────────────
 
-  if (WiFi.status() == WL_CONNECTED)
-  {
-    Serial.printf("\n[WiFi] OK\n");
-    Serial.printf("[WiFi] IP     : %s\n", WiFi.localIP().toString().c_str());
-    Serial.printf("[WiFi] Canal  : %d\n", WiFi.channel());
-    Serial.printf("[WiFi] RSSI   : %d dBm\n", WiFi.RSSI());
-    delay(1000);
-  }
-  else
-  {
-    Serial.println("\n[WiFi] ECHEC - reboot dans 5s");
-    delay(5000);
-    ESP.restart();
+void publishAll() {
+  char topic[48];
+  char payload[128];
+  snprintf(topic, sizeof(topic), "serre/%d/bac/%d", SERRE_ID, BAC_ID);
+
+  if (lastTemperatureAmbiante >= 0 && lastHumiditeAmbiante >= 0 && lastHumiditeSol >= 0) {
+    snprintf(payload, sizeof(payload),
+      "{\"temperatureAmbiante\":%.1f,\"humiditeAmbiante\":%.1f,\"humiditeSol\":%.1f}",
+      lastTemperatureAmbiante, lastHumiditeAmbiante, lastHumiditeSol);
+      
+    bool ok = mqttClient.publish(topic, payload);
+    
+    Serial.printf("MQTT -> %s : %s [%s]\n", topic, payload, ok ? "PUB OK" : "FAIL");
+    // lastHumiditeSol = -1.0; 
+  } else {
+    Serial.println("MQTT en attente : valeurs incompletes (attente air + sol)");
   }
 }
 
-// ─── NTP ─────────────────────────────────────────────────────────────────────
-void syncNTP()
-{
-  Serial.print("[NTP] Synchronisation");
+void connectMQTT() {
+  Serial.printf("[MQTT] Connexion a %s:%d...\n", MQTT_SERVER, MQTT_PORT);
+  
+  espClient.setCACert(ca_crt);
+  espClient.setCertificate(client_crt);
+  espClient.setPrivateKey(client_key);
+  
+  // Désactive la vérification stricte du certificat CA (utile pour le debug)
+  espClient.setInsecure();
+  espClient.setTimeout(5); // Évite le freeze total si le handshake TLS est lent
+  
+  mqttClient.setServer(MQTT_SERVER, MQTT_PORT);
+  mqttClient.setKeepAlive(60);     
+  mqttClient.setBufferSize(1024);  // Buffer augmenté à 1024 pour éviter les crash TLS
+
+  String clientId = "M5-Gateway-";
+  clientId += String((uint32_t)ESP.getEfuseMac(), HEX);
+
+  if (mqttClient.connect(clientId.c_str())) {
+    Serial.println("[MQTT] OK Connecte !");
+  } else {
+    Serial.printf("[MQTT] ECHEC, rc=%d\n", mqttClient.state());
+  }
+}
+
+// ─── CALLBACK ESP-NOW ────────────────────────────────────────────────────────
+
+void onDataRecv(const uint8_t* mac_addr, const uint8_t* data, int len) {
+  if (len != sizeof(SensorData)) {
+    Serial.printf("ESP-NOW : taille inattendue %d octets\n", len);
+    return;
+  }
+
+  SensorData received;
+  memcpy(&received, data, sizeof(received));
+  received.type[3] = '\0'; 
+
+  if (strncmp(received.type, "air", 3) == 0) {
+    lastTemperatureAmbiante = received.temperature;
+    lastHumiditeAmbiante    = received.humidity;
+    Serial.printf("ESP-NOW [air] -> T:%.1f°C  H:%.1f%%\n", received.temperature, received.humidity);
+  } 
+  else if (strncmp(received.type, "sol", 3) == 0) {
+    lastHumiditeSol = received.humidity;
+    Serial.printf("ESP-NOW [sol] -> Sol:%.1f%%\n", received.humidity);
+  }
+
+  pendingPublish = true; // Lève le drapeau pour la boucle loop()
+}
+
+// ─── INIT WIFI & NTP & ESP-NOW ───────────────────────────────────────────────
+
+void connectWiFi() {
+  WiFi.mode(WIFI_AP_STA); 
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  Serial.print("Connexion WiFi");
+  
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  // Empêche l'antenne de s'éteindre et de rater les paquets ESP-NOW
+  WiFi.setSleep(false); 
+  
+  Serial.printf("\nWiFi OK\nIP : %s\nCanal : %d\n", WiFi.localIP().toString().c_str(), WiFi.channel());
+}
+
+void syncNTP() {
   configTime(0, 0, NTP_SERVER);
   setenv("TZ", "CET-1CEST,M3.5.0,M10.5.0/3", 1);
   tzset();
 
   struct tm timeinfo;
   int retries = 0;
-  while (!getLocalTime(&timeinfo) && retries < 40)
-  {
+  Serial.print("NTP");
+  while (!getLocalTime(&timeinfo) && retries < 40) {
     delay(500);
     Serial.print(".");
     retries++;
   }
   Serial.println();
 
-  if (retries < 40)
-  {
-    char buf[32];
-    strftime(buf, sizeof(buf), "%d/%m/%Y %H:%M:%S", &timeinfo);
-    Serial.printf("[NTP] OK : %s\n", buf);
-    delay(1000);
-  }
-  else
-  {
-    Serial.println("[NTP] TIMEOUT - TLS risque d'echouer");
-    delay(2000);
+  if (retries < 40) {
+    Serial.printf("NTP OK\n");
+  } else {
+    Serial.println("NTP timeout - TLS va echouer");
   }
 }
 
-void connectMQTT()
-{
-  Serial.printf("[MQTT] Connexion a %s:%d...\n", MQTT_SERVER, MQTT_PORT);
-  espClient.setCACert(ca_crt);
-  espClient.setCertificate(client_crt);
-  espClient.setPrivateKey(client_key);
-  // Pour bypasser les certs en debug seulement :
-  espClient.setInsecure();
+void setupESPNow() {
+  // Forcer le canal ESP-NOW sur le même canal que le routeur WiFi
+  esp_wifi_set_promiscuous(true);
+  esp_wifi_set_channel(WiFi.channel(), WIFI_SECOND_CHAN_NONE);
+  esp_wifi_set_promiscuous(false);
 
-  mqttClient.setServer(MQTT_SERVER, MQTT_PORT);
-  mqttClient.setKeepAlive(30);
-
-  String clientId = "M5-Test-";
-  clientId += String((uint32_t)ESP.getEfuseMac(), HEX);
-  Serial.printf("[MQTT] Client ID : %s\n", clientId.c_str());
-
-  if (mqttClient.connect(clientId.c_str()))
-  {
-    Serial.println("[MQTT] OK Connecté !");
-    delay(1000);
+  if (esp_now_init() != ESP_OK) {
+    Serial.println("Erreur init ESP-NOW");
+    return;
   }
-  else
-  {
-    int rc = mqttClient.state();
-    Serial.printf("[MQTT] ECHEC rc=%d\n", rc);
-    Serial.printf("[MQTT] Heap libre : %d octets\n", esp_get_free_heap_size());
-    char buf[24];
-    snprintf(buf, sizeof(buf), "rc=%d", rc);
-  }
-}
-
-// ─── PUBLICATION ─────────────────────────────────────────────────────────────
-void publishTestMessage()
-{
-  char topic[48];
-  char payload[128];
-  snprintf(topic, sizeof(topic), "serre/%d/bac/%d", SERRE_ID, BAC_ID);
-
-  float fakeTemp = 20.0f + (publishCount % 10);
-  float fakeHum = 50.0f + (publishCount % 20);
-  float fakeSol = 40.0f + (publishCount % 15);
-
-  snprintf(payload, sizeof(payload),
-           "{\"temperatureAmbiante\":%.1f,\"humiditeAmbiante\":%.1f,\"humiditeSol\":%.1f,\"testCount\":%lu}",
-           fakeTemp, fakeHum, fakeSol, publishCount);
-
-  bool ok = mqttClient.publish(topic, payload);
-  publishCount++;
-
-  Serial.printf("[MQTT] %s  ->  %s\n", ok ? "PUB OK" : "PUB FAIL", topic);
-  Serial.printf("       Payload : %s\n", payload);
-  Serial.printf("       Heap : %d octets  |  Uptime : %lus\n",
-                esp_get_free_heap_size(), millis() / 1000);
+  esp_now_register_recv_cb(onDataRecv);
+  Serial.println("ESP-NOW gateway prete");
 }
 
 // ─── SETUP ───────────────────────────────────────────────────────────────────
-void setup()
-{
+
+void setup() {
   Serial.begin(115200);
-  delay(500);
-
-  Serial.println("\n=== TEST MQTT STANDALONE ===");
-
+  
   connectWiFi();
   syncNTP();
+  
+  // 1. On connecte MQTT d'abord (TLS lourd)
   connectMQTT();
+  delay(500); 
+  
+  // 2. Ensuite seulement, on active l'écoute silencieuse ESP-NOW
+  setupESPNow();
+  delay(100);
 
-  Serial.printf("[INFO] MAC       : %s\n", WiFi.macAddress().c_str());
-  Serial.printf("[INFO] Canal WiFi: %d\n", WiFi.channel());
-  Serial.printf("[INFO] Heap libre: %d octets\n", esp_get_free_heap_size());
-  Serial.println("[INFO] Boucle démarrée - publication toutes les 5s\n");
+  Serial.printf("MAC Gateway : %s\n", WiFi.macAddress().c_str());
+  Serial.println("=== SYSTEME PRET ===");
 }
 
 // ─── LOOP ────────────────────────────────────────────────────────────────────
-void loop()
-{
-  M5.update();
 
-  if (!mqttClient.connected())
-  {
-    if (millis() - lastMqttRetry > MQTT_RETRY_INTERVAL)
-    {
-      lastMqttRetry = millis();
-      Serial.println("[MQTT] Déconnecté - reconnexion...");
-      connectMQTT();
-    }
-    return;
+void loop() {
+  // Reconnexion MQTT si nécessaire
+  if (!mqttClient.connected() && millis() - lastMqttRetry > 10000) {
+    lastMqttRetry = millis();
+    connectMQTT();
   }
 
+  // Maintient la connexion MQTT et gère les trames entrantes/sortantes
   mqttClient.loop();
 
-  if (millis() - lastPublish > PUBLISH_INTERVAL_MS)
-  {
-    lastPublish = millis();
-    publishTestMessage();
+  // Si on a reçu une donnée ESP-NOW, on publie
+  if (pendingPublish) {
+    pendingPublish = false; 
+    if (mqttClient.connected()) {
+      publishAll();
+    } else {
+      Serial.println("MQTT non connecte, donnee capteur ignoree...");
+    }
+  }
+
+  // Battement de cœur pour confirmer que la boucle n'est pas bloquée
+  if (millis() - lastHeartbeat > 5000) {
+    lastHeartbeat = millis();
+    Serial.println("[INFO] Gateway active, en attente de donnees ESP-NOW...");
   }
 }
