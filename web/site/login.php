@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   // Validate credentials
   if (empty($username_err) && empty($password_err)) {
     // Prepare a select statement using PDO
-    $sql = 'SELECT id_utilisateur, username, nom, prenom, password FROM users WHERE username = ?';
+    $sql = 'SELECT id_utilisateur, username, nom, prenom, role, password FROM users WHERE username = ?';
     $stmt = $pdo->prepare($sql);
     if ($stmt->execute([$username])) {
       $row = $stmt->fetch();
@@ -51,6 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $hashed_password = $row['password'];
         $nom = $row['nom'];
         $prenom = $row['prenom'];
+        $role = $row['role'];
 
         if (password_verify($password, $hashed_password)) {
           session_regenerate_id(true);
@@ -61,6 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           $_SESSION['username'] = $username;
           $_SESSION['nom'] = $nom;
           $_SESSION['prenom'] = $prenom;
+          $_SESSION['role'] = $role;
 
           // Redirect to user page
           header('location: index.php');

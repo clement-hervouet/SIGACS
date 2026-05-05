@@ -84,6 +84,14 @@ require_once 'config/config.php';
 							<img src="assets/static/icons/info-circle.svg" alt="">
 						</div>
 					</a>
+
+					<?php if ($_SESSION['role'] == ('admin')): ?>
+						<a href="connexions/register.php">
+							<div class="admin utils_menu_btn">
+								<img src="assets/static/icons/user-plus.svg" alt="">
+							</div>
+						</a>
+					<?php endif ?>
 	
 				</div>
 			</div>
