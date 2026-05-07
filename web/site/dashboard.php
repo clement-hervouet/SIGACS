@@ -84,7 +84,7 @@ require_once 'config/config.php';
 							<img src="assets/static/icons/info-circle.svg" alt="">
 						</div>
 					</a>
-
+					<!--contenu admin eventuel-->
 					<?php if ($_SESSION['role'] == ('admin')): ?>
 						<a href="connexions/register.php">
 							<div class="admin utils_menu_btn">
@@ -97,7 +97,6 @@ require_once 'config/config.php';
 			</div>
 
 			<div class="navigation_tree">
-				<!--contenu admin eventuel-->
 				<div class="navigation_tree_content" id="navigationTree">
 					<?php include __DIR__ . '/menu/content.php'; ?>
 					
