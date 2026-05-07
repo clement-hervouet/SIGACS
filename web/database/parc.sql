@@ -75,7 +75,7 @@ CREATE TABLE capteur (
 
 -- Table: bloc
 CREATE TABLE bloc (
-    id_bloc         INTEGER PRIMARY KEY,
+    id_bloc         INTEGER PRIMARY KEY INTEGER NOT NULL AUTO_INCREMENT,
     bac             INTEGER REFERENCES bac(id_bac),
     x               INTEGER,
     y               INTEGER,
