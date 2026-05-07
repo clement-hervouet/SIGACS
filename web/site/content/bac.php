@@ -67,16 +67,24 @@ function blocColor(int $id): string {
         <tr><th>Arrosage</th><td><?= $bac['arrose'] ? '💧 Activé' : 'Désactivé' ?></td></tr>
     </table>
 
-    <h3>Grille des blocs</h3>
+<h3>Grille des blocs</h3>
 
-    <!-- GRID -->
+<div class="grid-wrapper">
+
+    <!-- + / - column button — top right of grid -->
+    <div class="grid-col-controls">
+        <button class="resize-btn" data-direction="col" data-action="remove">−</button>
+        <button class="resize-btn" data-direction="col" data-action="add">+</button>
+    </div>
+
+    <!-- grid itself -->
     <div class="bloc-grid"
          id="blocGrid"
          data-bac-id="<?= (int)$id ?>"
          style="
             display: grid;
-            grid-template-columns: repeat(<?= (int)$bac['x_taille'] ?>, 6rem);
-            grid-template-rows:    repeat(<?= (int)$bac['y_taille'] ?>, 6rem);
+            grid-template-columns: repeat(<?= (int)$bac['x_taille'] ?>, 8rem);
+            grid-template-rows:    repeat(<?= (int)$bac['y_taille'] ?>, 8rem);
             gap: 4px;
             width: fit-content;
         ">
@@ -87,47 +95,41 @@ function blocColor(int $id): string {
         ?>
 
         <?php if ($bloc): ?>
-            <!-- FILLED BLOC -->
-        <div class="bloc bloc-filled"
-             data-x="<?= $x ?>"
-             data-y="<?= $y ?>"
-             data-bloc-id="<?= (int)$bloc['id_bloc'] ?>"
-             style="
-                background: <?= blocColor((int)$bloc['id_culture']) ?>;
-             "
-             title="<?= htmlspecialchars($bloc['plante']) ?> — planté le <?= $bloc['plante_a'] ?>">
-
-            <span class="bloc-name"><?= htmlspecialchars(mb_substr($bloc['plante'], 0, 6)) ?></span>
-
-            <?php if (!empty($bloc['icone'])): ?>
-                <img src="<?= htmlspecialchars($bloc['icone']) ?>"
-                     alt="<?= htmlspecialchars($bloc['plante']) ?>"
-                     style="width:60%;height:60%;object-fit:contain;display:block;">
-            <?php endif; ?>
-            
-            <button class="bloc-remove"
-                    data-bloc-id="<?= (int)$bloc['id_bloc'] ?>"
-                    data-x="<?= $x ?>"
-                    data-y="<?= $y ?>"
-                    data-plant-name="<?= htmlspecialchars($bloc['plante']) ?>"
-                    title="Retirer la culture">✕</button>
-        </div>
-
-        <?php else: ?>
-            <!-- EMPTY BLOC -->
-            <div class="bloc bloc-empty"
-                 data-x="<?= $x ?>"
-                 data-y="<?= $y ?>"
-                 title="Bloc vide — cliquer pour assigner une culture">
-                <button class="bloc-add"
-                        data-x="<?= $x ?>"
-                        data-y="<?= $y ?>">+</button>
+            <div class="bloc bloc-filled"
+                 data-x="<?= $x ?>" data-y="<?= $y ?>"
+                 data-bloc-id="<?= (int)$bloc['id_bloc'] ?>"
+                 style="background:<?= blocColor((int)$bloc['id_culture']) ?>;"
+                 title="<?= htmlspecialchars($bloc['plante']) ?> — planté le <?= $bloc['plante_a'] ?>">
+                <span class="bloc-name"><?= htmlspecialchars(mb_substr($bloc['plante'], 0, 6)) ?></span>
+                <?php if (!empty($bloc['icone'])): ?>
+                    <img src="<?= htmlspecialchars($bloc['icone']) ?>"
+                         alt="<?= htmlspecialchars($bloc['plante']) ?>"
+                         style="width:60%;height:60%;object-fit:contain;display:block;">
+                <?php endif; ?>
+                <button class="bloc-remove"
+                        data-bloc-id="<?= (int)$bloc['id_bloc'] ?>"
+                        data-x="<?= $x ?>" data-y="<?= $y ?>"
+                        data-plant-name="<?= htmlspecialchars($bloc['plante']) ?>"
+                        title="Retirer la culture">✕</button>
             </div>
-
+        <?php else: ?>
+            <div class="bloc bloc-empty"
+                 data-x="<?= $x ?>" data-y="<?= $y ?>"
+            >
+                <button class="bloc-add" data-x="<?= $x ?>" data-y="<?= $y ?>">+</button>
+            </div>
         <?php endif; ?>
 
         <?php endfor; endfor; ?>
     </div>
+
+    <!-- + / - row button — bottom left of grid -->
+    <div class="grid-row-controls">
+        <button class="resize-btn" data-direction="row" data-action="remove">-</button>
+        <button class="resize-btn" data-direction="row" data-action="add">+</button>
+    </div>
+
+</div>
 
     <!-- CULTURE POPUP (hidden, positioned by JS near clicked bloc) -->
     <div id="culturePopup" style="display:none;">
@@ -169,11 +171,43 @@ function blocColor(int $id): string {
 </section>
 
 <style>
+    .grid-wrapper {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.grid-col-controls {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 4px;
+}
+
+.grid-row-controls {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 4px;
+}
+
+.resize-btn {
+    width: 2rem;
+    height: 2rem;
+    font-size: 1.2rem;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    cursor: pointer;
+    background: white;
+    line-height: 1;
+}
+.resize-btn:hover { background: #eee; }
+
 .bloc-grid { margin-top: 12px; }
 
 .bloc {
-    width: 6rem;
-    height: 6rem;
+    width: 8rem;
+    height: 8rem;
     border: 1px solid #aaa;
     border-radius: 4px;
     display: flex;
@@ -343,6 +377,38 @@ function blocColor(int $id): string {
             }
         });
     }
+
+    // ── RESIZE row/col ───────────────────────────────────────
+document.querySelectorAll('.resize-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+        const direction = btn.dataset.direction;
+        const action    = btn.dataset.action;
+
+        await doResize(direction, action, false);
+    });
+});
+
+async function doResize(direction, action, confirmed) {
+    const body = new URLSearchParams({
+        bac:       bacId,
+        direction: direction,
+        action:    action,
+        confirmed: confirmed ? '1' : '0',
+    });
+
+    const res  = await fetch('/content/bloc/resize.php', { method: 'POST', body });
+    const data = await res.json();
+
+    if (data.success) {
+        loadContent('content/bac.php?id=' + bacId);
+    } else if (data.confirm) {
+        // Server says blocs exist — ask user
+        const ok = confirm(data.message);
+        if (ok) await doResize(direction, action, true);
+    } else {
+        alert(data.errors.join('\n'));
+    }
+}
 
 })();
 </script>
