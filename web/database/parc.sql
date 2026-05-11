@@ -99,5 +99,6 @@ CREATE TABLE error (
     type_erreur     VARCHAR(64)  NOT NULL,   -- ex: UNKNOWN_SENSOR, BAC_NOT_FOUND, INVALID_PAYLOAD
     message         TEXT         NOT NULL,   -- description lisible de l'erreur
     valeur          TEXT,                    -- valeur brute reçue au moment de l'erreur
-    erreur_a        DATETIME     NOT NULL
+    erreur_a        DATETIME     NOT NULL,
+    acquittee       BOOLEAN      NOT NULL DEFAULT FALSE 
 );
