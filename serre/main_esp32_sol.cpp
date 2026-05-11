@@ -70,11 +70,6 @@ void setup() {
   Serial.begin(115200);
   delay(1000);
   
-  M5.begin();
-  M5.Lcd.setRotation(3);
-  M5.Lcd.fillScreen(BLACK);
-  M5.Axp.SetLDO2(false); // Eteint l'écran pour la batterie
-  
   analogSetAttenuation(ADC_11db);
   pinMode(SOIL_PIN, INPUT);
 
@@ -94,7 +89,7 @@ void loop() {
   humidity = constrain(humidity, 0, 100);
 
   // Préparation du paquet de données
-  dataToSend.temperature = 0; // Pas de température pour le sol
+  dataToSend.temperature = 0; 
   dataToSend.humidity = (float)humidity;
 
   Serial.printf("RAW : %d  ->  Humidite Sol : %d %%\n", raw, humidity);
