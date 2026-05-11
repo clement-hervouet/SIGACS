@@ -7,7 +7,7 @@ require_once __DIR__ . '/../config/config.php';
 
 $pdo = get_pdo('app');
 
-$par_page_autorise = [15, 30];
+$par_page_autorise = [15, 30,60,120,240,480,960];
 $par_page = filter_input(INPUT_GET, 'par_page', FILTER_VALIDATE_INT);
 if (!in_array($par_page, $par_page_autorise)) $par_page = 15;
 
