@@ -28,6 +28,16 @@ $stmt = $pdo->prepare('
 ');
 $stmt->execute([$par_page, $offset]);
 $alarmes = $stmt->fetchAll();
+
+function categorieErreur(string $type): string {
+    $conf = ['BAC_NOT_FOUND', 'UNKNOWN_SENSOR'];
+    $tech = ['INVALID_VALUE', 'VALUE_OUT_OF_RANGE', 'INVALID_ENCODING', 'INVALID_PAYLOAD'];
+    $sys  = ['MQTT_DISCONNECT', 'UNEXPECTED_ERROR','DB_ERROR', 'DB_INSERT_ERROR'];
+    if (in_array($type, $conf)) return 'Configuration';
+    if (in_array($type, $tech)) return 'Technique';
+    if (in_array($type, $sys))  return 'Système';
+    return 'Inconnue';
+}
 ?>
 
 <section class="detail-serre">
@@ -49,6 +59,7 @@ $alarmes = $stmt->fetchAll();
             <tr>
                 <th><input type="checkbox" id="toutSelectionner" title="Tout sélectionner"></th>
                 <th>Date</th>
+                <th>Catégorie</th>
                 <th>Type</th>
                 <th>Message</th>
                 <th>Valeur reçue</th>
@@ -56,10 +67,13 @@ $alarmes = $stmt->fetchAll();
             </tr>
         </thead>
         <tbody>
-        <?php foreach ($alarmes as $a): ?>
-            <tr id="alarme-<?= (int)$a['id_error'] ?>">
+        <?php foreach ($alarmes as $a):
+            $cat = categorieErreur($a['type_erreur']);
+        ?>
+            <tr id="alarme-<?= (int)$a['id_error'] ?>" class="ligne-alarme" style="cursor:pointer;">
                 <td><input type="checkbox" class="chk-alarme" value="<?= (int)$a['id_error'] ?>"></td>
                 <td><?= htmlspecialchars($a['erreur_a']) ?></td>
+                <td><?= htmlspecialchars($cat) ?></td>
                 <td><?= htmlspecialchars($a['type_erreur']) ?></td>
                 <td><?= htmlspecialchars($a['message']) ?></td>
                 <td><?= htmlspecialchars($a['valeur'] ?? '—') ?></td>
@@ -81,7 +95,6 @@ $alarmes = $stmt->fetchAll();
                 <?php endforeach; ?>
             </select>
         </span>
-
         <span>
             <?php if ($page > 1): ?>
                 <span style="cursor:pointer; text-decoration:underline;"
@@ -90,9 +103,7 @@ $alarmes = $stmt->fetchAll();
                     ← Précédent
                 </span>
             <?php endif; ?>
-
             &nbsp;Page <?= $page ?> / <?= $nb_pages ?>&nbsp;
-
             <?php if ($page < $nb_pages): ?>
                 <span style="cursor:pointer; text-decoration:underline;"
                       data-action="content"
@@ -108,12 +119,10 @@ $alarmes = $stmt->fetchAll();
 
 <script>
 (function () {
-    const btnAcquitter   = document.getElementById('btnAcquitterSelection');
-    const toutChk        = document.getElementById('toutSelectionner');
-    const compteur       = document.getElementById('compteurSelection');
-    const parPageSelect  = document.getElementById('selectParPage');
-    const parPage        = <?= $par_page ?>;
-    const page           = <?= $page ?>;
+    const btnAcquitter  = document.getElementById('btnAcquitterSelection');
+    const toutChk       = document.getElementById('toutSelectionner');
+    const compteur      = document.getElementById('compteurSelection');
+    const parPageSelect = document.getElementById('selectParPage');
 
     function getCoches() {
         return [...document.querySelectorAll('.chk-alarme:checked')];
@@ -124,6 +133,19 @@ $alarmes = $stmt->fetchAll();
         btnAcquitter.disabled = n === 0;
         compteur.textContent  = n + ' sélectionnée(s)';
     }
+
+    // Clic sur la ligne → coche/décoche la checkbox
+    document.querySelectorAll('.ligne-alarme').forEach(tr => {
+        tr.addEventListener('click', (e) => {
+            if (e.target.type === 'checkbox' || e.target.tagName === 'BUTTON') return;
+            const chk = tr.querySelector('.chk-alarme');
+            if (chk) {
+                chk.checked = !chk.checked;
+                toutChk.checked = document.querySelectorAll('.chk-alarme:not(:checked)').length === 0;
+                majBouton();
+            }
+        });
+    });
 
     // Tout sélectionner / désélectionner
     if (toutChk) {
@@ -142,9 +164,10 @@ $alarmes = $stmt->fetchAll();
 
     // Acquittement unitaire
     document.querySelectorAll('.btn-acquitter').forEach(btn => {
-        btn.addEventListener('click', async () => {
-            const id = btn.dataset.id;
-            const res  = await fetch('/content/alarme_acquitter.php', {
+        btn.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            const id  = btn.dataset.id;
+            const res = await fetch('/content/alarme_acquitter.php', {
                 method: 'POST',
                 body: new URLSearchParams({ id }),
             });
@@ -152,6 +175,7 @@ $alarmes = $stmt->fetchAll();
             if (data.success) {
                 document.getElementById('alarme-' + id).remove();
                 verifierTableauVide();
+                majBouton();
             } else {
                 alert(data.errors.join('\n'));
             }
@@ -161,7 +185,7 @@ $alarmes = $stmt->fetchAll();
     // Acquittement en lot
     btnAcquitter.addEventListener('click', async () => {
         const ids = getCoches().map(c => parseInt(c.value));
-        const res  = await fetch('/content/alarme_acquitter.php', {
+        const res = await fetch('/content/alarme_acquitter.php', {
             method: 'POST',
             body: new URLSearchParams({ ids: JSON.stringify(ids) }),
         });
@@ -186,7 +210,6 @@ $alarmes = $stmt->fetchAll();
         }
     }
 
-    // Changement de lignes par page
     if (parPageSelect) {
         parPageSelect.addEventListener('change', () => {
             if (typeof loadContent === 'function') {

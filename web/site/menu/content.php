@@ -53,7 +53,6 @@ $cultures = $stmt2->fetchAll();
 ?>
 
 <ul>
-    
     <!-- ── ALARMES EN COURS ── -->
     <li>
         <div class="line"
@@ -63,7 +62,6 @@ $cultures = $stmt2->fetchAll();
             <a>Alarmes en cours</a>
         </div>
     </li>
-
     <!-- ── HISTORIQUE DES ALARMES ── -->
     <li>
         <div class="line"
