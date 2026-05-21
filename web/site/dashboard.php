@@ -75,18 +75,19 @@ require_once 'config/config.php';
 	
 					<a href="">
 						<div class="utils_menu_btn">
-							<img src="assets/static/icons/refresh.svg" alt="">
+							<img src="assets/static/icons/triangle-alert.svg" alt="">
 						</div>
 					</a>
 	
-					<a href="">
-						<div class="utils_menu_btn">
-							<img src="assets/static/icons/info-circle.svg" alt="">
-						</div>
+					<a href="#" data-action="content" data-target="content/alarmes.php">
+     					<div class="utils_menu_btn">
+     					   <img src="assets/static/icons/info-circle.svg" alt="">
+     					</div>
 					</a>
+					
 					<!--contenu admin eventuel-->
 					<?php if ($_SESSION['role'] == ('admin')): ?>
-						<a href="connexions/register.php">
+						<a id="add_user" href="connexions/register.php">
 							<div class="admin utils_menu_btn">
 								<img src="assets/static/icons/user-plus.svg" alt="">
 							</div>

@@ -53,25 +53,6 @@ $cultures = $stmt2->fetchAll();
 ?>
 
 <ul>
-    <!-- ── ALARMES EN COURS ── -->
-    <li>
-        <div class="line"
-             data-action="content"
-             data-target="content/alarmes.php">
-            <img src="assets/static/icons/navigation_tree/panel-top-open.svg" alt="">
-            <a>Alarmes en cours</a>
-        </div>
-    </li>
-    <!-- ── HISTORIQUE DES ALARMES ── -->
-    <li>
-        <div class="line"
-             data-action="content"
-             data-target="content/alarmes_historique.php">
-            <img src="assets/static/icons/navigation_tree/panel-top-open.svg" alt="">
-            <a>Historique des alarmes</a>
-        </div>
-    </li>
-
     <!-- ── NEW SERRE ── -->
     <li>
         <div class="line"
