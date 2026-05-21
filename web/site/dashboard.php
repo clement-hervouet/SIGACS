@@ -61,25 +61,25 @@ require_once 'config/config.php';
 						</div>
 					</a>
 	
-					<a href="logout.php">
+					<a id="log_out" href="logout.php">
 						<div class="utils_menu_btn">
 							<img src="assets/static/icons/log-out.svg" alt="">
 						</div>
 					</a>
 	
-					<a href="">
+					<a id="settings" href="">
 						<div class="utils_menu_btn">
 							<img src="assets/static/icons/settings.svg" alt="">
 						</div>
 					</a>
 	
-					<a href="">
+					<a id="alerts" href="">
 						<div class="utils_menu_btn">
 							<img src="assets/static/icons/triangle-alert.svg" alt="">
 						</div>
 					</a>
 	
-					<a href="#" data-action="content" data-target="content/alarmes.php">
+					<a id="erreurs" href="#" data-action="content" data-target="content/alarmes.php">
      					<div class="utils_menu_btn">
      					   <img src="assets/static/icons/info-circle.svg" alt="">
      					</div>
