@@ -1,0 +1,32 @@
+<div class="form edit" id="formModal">
+  <div class="form-content">
+    <form action="edit_serre.php" method="post">
+      <div class="form-header">
+        <h2>Modifier serre <?php echo ?></h2>
+      </div>
+
+      <div class="form-body">
+        <div class="input">
+          <label for="nom">Nom</label>
+          <input
+            type="text"
+            minlength="5"
+            maxlength="25"
+            placeholder="Serre de Riri"
+            required
+            name="nom"
+            id="nom"
+          />
+        </div>
+
+        <div class="input">
+          <input type="submit" hidden />
+        </div>
+      </div>
+      <div class="form-footer">
+        <input class="cancel" type="button" value="annuler" id="formCancel" />
+        <input class="submit" type="submit" value="valider" id="formSubmit" />
+      </div>
+    </form>
+  </div>
+</div>

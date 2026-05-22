@@ -1,6 +1,8 @@
 <?php
+session_start();
 // Include config file
 require_once '../config/config.php';
+$pdo = get_pdo("login");
 
 
 // Define variables and initialize with empty values
@@ -27,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 				$pdo->beginTransaction();
 
 				// Lock the row if exists to prevent race conditions
-				$sql = 'SELECT id FROM users WHERE username = ? FOR UPDATE';
+				$sql = 'SELECT id_utilisateur FROM users WHERE username = ? FOR UPDATE';
 				$stmt = $pdo->prepare($sql);
 				$stmt->execute([$param_username]);
 
@@ -109,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			// Attempt to execute
 			if ($stmt->execute([$username, $param_password, $nom, $prenom])) {
 				$pdo->commit();
-				header('location: ./login.php');
+				header('location: ../login.php');
 				exit;
 			} else {
 				// Execution failed
@@ -143,47 +145,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body>
 	<main>
-		<section class="container wrapper">
-			<h2 class="display-4 pt-3">Sign Up</h2>
-			<p class="text-center">Please fill this form to create an account.</p>
-			<form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
-				<div class="form-group <?php (!empty($username_err)) ? 'has_error' : ''; ?>">
-					<label for="username">Username</label>
-					<input type="text" name="username" id="username" class="form-control" value="<?php echo $username ?>">
-					<span class="help-block"><?php echo $username_err; ?></span>
-				</div>
+		<?php if (!isset($_SESSION["role"])): ?>
+			<section class="container wrapper">
+				<h2 class="display-4 pt-3">S'inscrire</h2>
+				<p class="text-center">Contactez votre administrateur pour avoir un compte.</p>
+				<p class="text-center"><a href="../login.php">Retour à la page de connexion</a></p>
+			</section>
+		<?php elseif ($_SESSION['role'] == ('admin')): ?>
 
-				<div class="form-group <?php (!empty($prenom_err)) ? 'has_error' : ''; ?>">
-					<label for="prenom">Prénom</label>
-					<input type="text" name="prenom" id="prenom" class="form-control" placeholder="Prénom" value="<?php echo htmlspecialchars($prenom); ?>">
-					<span class="help-block"><?php echo $prenom_err; ?></span>
-				</div>
+			<section class="container wrapper">
+				<h2 class="display-4 pt-3">Inscrire un utilisateur</h2>
+				<p class="text-center">Remplissez ce formulaire</p>
+				<form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
+					<div class="form-group <?php (!empty($username_err)) ? 'has_error' : ''; ?>">
+						<label for="username">Nom d'utilisateur</label>
+						<input type="text" name="username" id="username" class="form-control" value="<?php echo $username ?>">
+						<span class="help-block">Cet identifiant ne peut être changé</span>
+						<span class="help-block"><?php echo $username_err; ?></span>
+					</div>
 
-				<div class="form-group <?php (!empty($nom_err)) ? 'has_error' : ''; ?>">
-					<label for="nom">Nom</label>
-					<input type="text" name="nom" id="nom" class="form-control" placeholder="Nom" value="<?php echo htmlspecialchars($nom); ?>">
-					<span class="help-block"><?php echo $nom_err; ?></span>
-				</div>
+					<div class="form-group <?php (!empty($prenom_err)) ? 'has_error' : ''; ?>">
+						<label for="prenom">Prénom</label>
+						<input type="text" name="prenom" id="prenom" class="form-control" placeholder="Prénom" value="<?php echo htmlspecialchars($prenom); ?>">
+						<span class="help-block"><?php echo $prenom_err; ?></span>
+					</div>
 
-				<div class="form-group <?php (!empty($password_err)) ? 'has_error' : ''; ?>">
-					<label for="password">Password</label>
-					<input type="password" name="password" id="password" class="form-control" value="<?php echo $password ?>">
-					<span class="help-block"><?php echo $password_err; ?></span>
-				</div>
+					<div class="form-group <?php (!empty($nom_err)) ? 'has_error' : ''; ?>">
+						<label for="nom">Nom</label>
+						<input type="text" name="nom" id="nom" class="form-control" placeholder="Nom" value="<?php echo htmlspecialchars($nom); ?>">
+						<span class="help-block"><?php echo $nom_err; ?></span>
+					</div>
 
-				<div class="form-group <?php (!empty($confirm_password_err)) ? 'has_error' : ''; ?>">
-					<label for="confirm_password">Confirm Password</label>
-					<input type="password" name="confirm_password" id="confirm_password" class="form-control" value="<?php echo $confirm_password; ?>">
-					<span class="help-block"><?php echo $confirm_password_err; ?></span>
-				</div>
+					<div class="form-group <?php (!empty($password_err)) ? 'has_error' : ''; ?>">
+						<label for="password">Mot de passe</label>
+						<input type="password" name="password" id="password" class="form-control" value="<?php echo $password ?>">
+						<span class="help-block"><?php echo $password_err; ?></span>
+					</div>
 
-				<div class="form-group">
-					<input type="submit" class="btn btn-block btn-outline-success" value="Submit">
-					<input type="reset" class="btn btn-block btn-outline-primary" value="Reset">
-				</div>
-				<p>Already have an account? <a href="../login.php">Login here</a>.</p>
-			</form>
-		</section>
+					<div class="form-group <?php (!empty($confirm_password_err)) ? 'has_error' : ''; ?>">
+						<label for="confirm_password">Confirmer mot de passe</label>
+						<input type="password" name="confirm_password" id="confirm_password" class="form-control" value="<?php echo $confirm_password; ?>">
+						<span class="help-block"><?php echo $confirm_password_err; ?></span>
+					</div>
+
+					<div class="form-group">
+						<input type="submit" class="btn btn-block btn-outline-success" value="Inscrire le compte">
+					</div>
+					<p>Retour à la page d'acceuil <a href="../index.php">Acceuil</a>.</p>
+				</form>
+			</section>
+		<?php endif ?>
 	</main>
 </body>
 
