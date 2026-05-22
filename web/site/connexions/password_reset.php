@@ -1,0 +1,119 @@
+<?php
+// Initialize the session
+session_start();
+
+// Check if the user is logged in, if not then redirect to login page
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    header('location: ../login.php');
+    exit;
+}
+
+// Include config file
+require_once '../config/config.php';
+$pdo = get_pdo("login");
+
+// Define variables and initialize with empty values
+$new_password = $confirm_password = '';
+$new_password_err = $confirm_password_err = '';
+
+// Processing form data when form is submitted
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+    // Validate new password
+    if (empty(trim($_POST['new_password']))) {
+        $new_password_err = 'Please enter the new password.';
+    } elseif (strlen(trim($_POST['new_password'])) < 6) {
+        $new_password_err = 'Password must have atleast 6 characters.';
+    } else {
+        $new_password = trim($_POST['new_password']);
+    }
+
+    // Validate confirm password
+    if (empty(trim($_POST['confirm_password']))) {
+        $confirm_password_err = 'Please confirm the password.';
+    } else {
+        $confirm_password = trim($_POST['confirm_password']);
+        if (empty($new_password_err) && ($new_password != $confirm_password)) {
+            $confirm_password_err = 'Password did not match.';
+        }
+    }
+
+    // Check input errors before updating the database
+    if (empty($new_password_err) && empty($confirm_password_err)) {
+        try {
+            // Basic safety: ensure session id is numeric
+            $param_id = isset($_SESSION['id']) ? (int)$_SESSION['id'] : 0;
+
+            if ($param_id <= 0) {
+                throw new Exception('Invalid user id.');
+            }
+
+            $pdo->beginTransaction();
+
+            // Prepare an update statement using PDO
+            $sql = 'UPDATE users SET password = ? WHERE id_utilisateur = ?';
+            $stmt = $pdo->prepare($sql);
+
+            // Set parameters
+            $param_password = password_hash($new_password, PASSWORD_DEFAULT);
+
+            // Attempt to execute the prepared statement
+            if ($stmt->execute([$param_password, $param_id])) {
+                $pdo->commit();
+                // Password updated successfully. Destroy the session, and redirect to login page
+                session_destroy();
+                header("location: ../login.php");
+                exit();
+            } else {
+                $pdo->rollBack();
+                echo "Oops! Something went wrong. Please try again later.";
+            }
+        } catch (Exception $e) {
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
+            echo "Oops! Something went wrong. Please try again later.";
+        }
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Réinitialiser mot de passe</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/cosmo/bootstrap.min.css" rel="stylesheet" integrity="sha384-qdQEsAI45WFCO5QwXBelBe1rR9Nwiss4rGEqiszC+9olH1ScrLrMQr1KmDR964uZ" crossorigin="anonymous">
+    <link rel="stylesheet" href="../assets/static/css/style.css">
+    
+</head>
+
+<body>
+    <main class="container wrapper">
+        <section>
+            <h2>Réinitialiser mot de passe</h2>
+            <p>Remplissez ce formulaire pour réinitialiser votre mot de passe.</p>
+            <p>Connecté en tant que <b><?php echo $_SESSION['nom']; echo " "; echo $_SESSION['prenom']; ?></b></p>
+            <p>Avec l'identifiant <b><?php echo $_SESSION['username']; ?></b></p>
+            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+                <div class="form-group <?php echo (!empty($new_password_err)) ? 'has-error' : ''; ?>">
+                    <label>Nouveau mot de passe</label>
+                    <input type="password" name="new_password" class="form-control" value="<?php echo $new_password; ?>">
+                    <span class="help-block"><?php echo $new_password_err; ?></span>
+                </div>
+                <div class="form-group <?php echo (!empty($confirm_password_err)) ? 'has-error' : ''; ?>">
+                    <label>Confirmez votre nouveau mot de passe</label>
+                    <input type="password" name="confirm_password" class="form-control">
+                    <span class="help-block"><?php echo $confirm_password_err; ?></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-block btn-primary" value="Submit">
+                    <a class="btn btn-block btn-link bg-light" href="../index.php">Annuler</a>
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+
+</html>
