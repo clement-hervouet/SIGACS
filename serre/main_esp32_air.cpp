@@ -91,8 +91,7 @@ void setup() {
   btStop();
 
   M5.begin(false, true, false); 
-  M5.Axp.SetLDO2(false);  
-  M5.Axp.SetLDO3(false);  
+  M5.Axp.SetLDO2(false);
 
   pinMode(DHTPIN, INPUT);
   dht.begin();

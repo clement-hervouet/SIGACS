@@ -206,6 +206,7 @@ void setup() {
   // espClient.setCertificate(client_crt);
   // espClient.setPrivateKey(client_key);
   // espClient.setHandshakeTimeout(8);
+  espClient.setInsecure();
 
   mqttClient.setServer(MQTT_SERVER, MQTT_PORT);
   mqttClient.setKeepAlive(60);

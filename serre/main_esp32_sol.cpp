@@ -1,4 +1,3 @@
-
 #include <Arduino.h>
 #include <WiFi.h>
 #include <esp_now.h>
@@ -100,8 +99,6 @@ void setup() {
 
   M5.begin(false, true, false);
   M5.Axp.SetLDO2(false);
-  M5.Axp.SetLDO3(false);
-
   analogSetAttenuation(ADC_11db);
   pinMode(SOIL_PIN, INPUT);
 
@@ -113,7 +110,7 @@ void setup() {
 
 void loop() {
   int raw      = readSoilRaw();
-  int humidity = map(raw, SOIL_WET, SOIL_DRY, 0, 100); // mapping d'origine conservé
+  int humidity = map(raw, SOIL_WET, SOIL_DRY, 0, 100); 
   humidity     = constrain(humidity, 0, 100);
 
   dataToSend.temperature = 0;
