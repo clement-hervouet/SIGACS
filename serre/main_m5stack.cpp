@@ -324,6 +324,7 @@ void loop() {
     if (mqttClient.connected()) {
       publishAll(snap);
       xQueueReceive(sensorQueue, &snap, 0);  
+    }
   }
 
   if (millis() - lastChannelCheck > 30000UL) {
