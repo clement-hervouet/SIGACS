@@ -53,7 +53,6 @@ $cultures = $stmt2->fetchAll();
 ?>
 
 <ul>
-
     <!-- ── NEW SERRE ── -->
     <li>
         <div class="line"
@@ -107,7 +106,7 @@ $cultures = $stmt2->fetchAll();
         <div class="line"
              data-action="modal"
              data-target="forms/new/new_culture.html">
-            <img src="assets/static/icons/navigation_tree/plant-plus.svg" alt="">
+            <img src="assets/static/icons/navigation_tree/plant-plus.png" alt="">
             <a>Ajouter une nouvelle culture</a>
         </div>
     </li>

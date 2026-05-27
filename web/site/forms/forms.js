@@ -170,6 +170,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target === modalContainer) closeModal();
     });
 
+    document.querySelectorAll('.utils_menu [data-action]').forEach(el => {
+    el.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (el.dataset.action === 'content') loadContent(el.dataset.target);
+        if (el.dataset.action === 'modal')   openModal(el.dataset.target);
+    });
+});
+
     bindMenuClicks();
     bindTreeToggles();
 });
