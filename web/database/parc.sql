@@ -62,4 +62,10 @@ CREATE TABLE mesure (
 -- Table: error
 -- Log des erreurs runtime du programme MQTT bridge
 CREATE TABLE error (
-
+    id_error        INTEGER PRIMARY KEY AUTO_INCREMENT,
+    type_erreur     VARCHAR(64)  NOT NULL,   -- ex: UNKNOWN_SENSOR, BAC_NOT_FOUND, INVALID_PAYLOAD
+    message         TEXT         NOT NULL,   -- description lisible de l'erreur
+    valeur          TEXT,                    -- valeur brute reçue au moment de l'erreur
+    erreur_a        DATETIME     NOT NULL,
+    acquittee       BOOLEAN      NOT NULL DEFAULT FALSE 
+);
