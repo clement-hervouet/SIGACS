@@ -1,9 +1,10 @@
-FROM python:3.11-slim
+FROM python:3.12-slim
 
 WORKDIR /app
 
-COPY app.py .
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN pip install paho-mqtt mysql-connector-python
+COPY mqtt_bridge.py .
 
-CMD ["python", "app.py"]
+CMD ["python", "mqtt_bridge.py"]
