@@ -7,7 +7,7 @@ require_once __DIR__ . '/../config/config.php';
 
 $pdo = get_pdo('app');
 
-$par_page_autorise = [15, 30];
+$par_page_autorise = [15, 30,60,120,240,480];
 $par_page = filter_input(INPUT_GET, 'par_page', FILTER_VALIDATE_INT);
 if (!in_array($par_page, $par_page_autorise)) $par_page = 15;
 
@@ -22,8 +22,7 @@ $categories = [
 ];
 
 $filtre = filter_input(INPUT_GET, 'categorie', FILTER_SANITIZE_SPECIAL_CHARS);
-if (!array_key_exists($filtre, $categories)) $filtre = '';
-
+if ($filtre === null || !array_key_exists($filtre, $categories)) $filtre = '';
 if ($filtre !== '') {
     $types        = $categories[$filtre];
     $placeholders = implode(',', array_fill(0, count($types), '?'));
@@ -63,8 +62,8 @@ function categorieErreur(string $type): string {
     return 'Inconnue';
 }
 
-$urlBase   = 'content/alarmes_historique.php?par_page=' . $par_page . ($filtre ? '&categorie=' . $filtre : '');
-$urlRetour = 'content/alarmes.php?par_page=' . $par_page . ($filtre ? '&categorie=' . $filtre : '');
+$urlBase   = 'content/erreurs_historique.php?par_page=' . $par_page . ($filtre ? '&categorie=' . $filtre : '');
+$urlRetour = 'content/erreurs.php?par_page=' . $par_page . ($filtre ? '&categorie=' . $filtre : '');
 ?>
 
 <section class="detail-serre">
@@ -154,7 +153,7 @@ $urlRetour = 'content/alarmes.php?par_page=' . $par_page . ($filtre ? '&categori
     const filtre        = <?= json_encode($filtre) ?>;
 
     function urlHist(page, pp, cat) {
-        let url = 'content/alarmes_historique.php?page=' + page + '&par_page=' + pp;
+        let url = 'content/erreurs_historique.php?page=' + page + '&par_page=' + pp;
         if (cat) url += '&categorie=' + encodeURIComponent(cat);
         return url;
     }

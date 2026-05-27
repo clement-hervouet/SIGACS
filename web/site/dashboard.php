@@ -31,6 +31,35 @@ require_once 'config/config.php';
 	<script src="forms/forms.js" defer></script>
 </head>
 
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    // Vérification unique au chargement
+    try {
+        const res  = await fetch('content/api/alarmes_check.php');
+        const data = await res.json();
+        if (data.has_alerts) {
+            const btn = document.querySelector('#alerts .utils_menu_btn');
+            if (btn) {
+                const badge = document.createElement('span');
+                badge.id = 'alertsBadge';
+                badge.style.cssText = 'position:absolute;top:-4px;right:-4px;background:red;color:white;border-radius:50%;min-width:16px;height:16px;font-size:10px;display:flex;align-items:center;justify-content:center;padding:0 2px;';
+                badge.textContent = data.count;
+                btn.appendChild(badge);
+            }
+        }
+    } catch (e) {}
+
+    // Bind le bouton #alerts
+    const alertBtn = document.getElementById('alerts');
+    if (alertBtn) {
+        alertBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (typeof loadContent === 'function')
+                loadContent('content/alarmes_recurrentes.php');
+        });
+    }
+});
+</script>
 <body>
     <div class="main">
         <div class="navbar">
@@ -73,18 +102,18 @@ require_once 'config/config.php';
 						</div>
 					</a>
 	
-					<a id="alerts" href="">
-						<div class="utils_menu_btn">
-							<img src="assets/static/icons/triangle-alert.svg" alt="">
-						</div>
+					<a id="alerts" href="#" data-action="content" data-target="content/alarmes_recurrentes.php">
+   						 <div class="utils_menu_btn" style="position:relative;">
+       						 <img src="assets/static/icons/triangle-alert.svg" alt="">
+   						 </div>
 					</a>
-	
-					<a id="erreurs" href="#" data-action="content" data-target="content/alarmes.php">
+					
+					<a id="erreurs" href="#" data-action="content" data-target="content/erreurs.php">
      					<div class="utils_menu_btn">
      					   <img src="assets/static/icons/info-circle.svg" alt="">
      					</div>
 					</a>
-					
+						
 					<!--contenu admin eventuel-->
 					<?php if ($_SESSION['role'] == ('admin')): ?>
 						<a id="add_user" href="connexions/register.php">

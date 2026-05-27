@@ -7,7 +7,7 @@ require_once __DIR__ . '/../config/config.php';
 
 $pdo = get_pdo('app');
 
-$par_page_autorise = [15, 30];
+$par_page_autorise = [15, 30,60,120,240,480];
 $par_page = filter_input(INPUT_GET, 'par_page', FILTER_VALIDATE_INT);
 if (!in_array($par_page, $par_page_autorise)) $par_page = 15;
 
@@ -65,8 +65,7 @@ function categorieErreur(string $type): string {
 }
 
 $urlBase = 'content/alarmes.php?par_page=' . $par_page . ($filtre ? '&categorie=' . $filtre : '');
-$urlHist = 'content/alarmes_historique.php?par_page=' . $par_page . ($filtre ? '&categorie=' . $filtre : '');
-?>
+$urlHist = 'content/erreurs_historique.php?par_page=' . $par_page . ($filtre ? '&categorie=' . $filtre : '');?>
 
 <section class="detail-serre">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
@@ -181,7 +180,7 @@ $urlHist = 'content/alarmes_historique.php?par_page=' . $par_page . ($filtre ? '
     }
 
     function urlAlarmes(page, pp, cat) {
-        let url = 'content/alarmes.php?page=' + page + '&par_page=' + pp;
+        let url = 'content/erreurs.php?page=' + page + '&par_page=' + pp;
         if (cat) url += '&categorie=' + encodeURIComponent(cat);
         return url;
     }
@@ -218,7 +217,7 @@ $urlHist = 'content/alarmes_historique.php?par_page=' . $par_page . ($filtre ? '
         btn.addEventListener('click', async (e) => {
             e.stopPropagation();
             const id  = btn.dataset.id;
-            const res = await fetch('/content/alarme_acquitter.php', {
+            const res = await fetch('/content/erreur_acquitter.php', {
                 method: 'POST',
                 body: new URLSearchParams({ id }),
             });
@@ -237,7 +236,7 @@ $urlHist = 'content/alarmes_historique.php?par_page=' . $par_page . ($filtre ? '
     if (btnAcquitter) {
         btnAcquitter.addEventListener('click', async () => {
             const ids = getCoches().map(c => parseInt(c.value));
-            const res = await fetch('/content/alarme_acquitter.php', {
+            const res = await fetch('/content/erreur_acquitter.php', {
                 method: 'POST',
                 body: new URLSearchParams({ ids: JSON.stringify(ids) }),
             });
